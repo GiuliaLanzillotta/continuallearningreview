@@ -1,0 +1,869 @@
+
+% This file was adapted from ICLR2022_conference.tex example provided for the ICLR conference
+\documentclass[10pt]{article} % For LaTeX2e
+%\usepackage{tmlr}
+% If accepted, instead use the following line for the camera-ready submission:
+%\usepackage[accepted]{tmlr}
+% To de-anonymize and remove mentions to TMLR (for example for posting to preprint servers), instead use the following:
+\usepackage[preprint]{tmlr}
+
+\usepackage{enumitem}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+%\usepackage{xparse}
+\usepackage{mathtools}
+\usepackage{enumerate}
+\usepackage{xcolor}
+\usepackage{natbib}
+\usepackage{booktabs}
+\usepackage{comment}
+\usepackage{tikz}
+\usepackage[ruled,vlined]{algorithm2e}
+
+
+\usetikzlibrary{arrows.meta, positioning}
+
+
+\newcommand{\hessian}{\vH}
+\newcommand{\rank}{\mbox{rank}}
+\newcommand{\memory}{\mathcal{B}}
+\newcommand{\absent}{\mathcal{A}}
+\newcommand{\forgetting}{\delta M}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\definecolor{forestgreen}{rgb}{0.13, 0.55, 0.13}  % A nice deep forest green
+\definecolor{lightred}{RGB}{255, 102, 102}
+\newcommand{\lighthline}{\noindent\textcolor{gray!50}{\rule{\linewidth}{0.4pt}}}
+
+\newlist{todolist}{itemize}{2}
+\setlist[todolist]{label=$\square$}
+
+
+% Optional math commands from https://github.com/goodfeli/dlbook_notation.
+% \input{math_commands.tex}
+\input{defns}
+
+% Please leave these options as they are
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+    citecolor=blue,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+    }
+\usepackage{cleveref}
+\crefname{thm}{Theorem}{Theorems}
+\crefname{corr}{Corollary}{Corollaries}
+\crefname{defn}{Definition}{Definitions}
+\crefname{assump}{Assumption}{Assumption}
+\crefname{prop}{Proposition}{Propositions}
+
+
+\setlength{\marginparwidth }{2cm}
+\usepackage[colorinlistoftodos,prependcaption,textsize=small,color=blue!20]{todonotes}
+\newcommand{\giulia}[1]{\todo[inline,color=brown!20]{Giulia: #1}}
+\listfiles
+
+
+\title{Continual Learning as Loss Approximation.}
+
+% Authors must not appear in the submitted version. They should be hidden
+% as long as the tmlr package is used without the [accepted] or [preprint] options.
+% Non-anonymous submissions will be rejected without review.
+\author{\name Giulia Lanzillotta \email glanzillo@ethz.ch}
+% \author{\name Giulia Lanzillotta \email glanzillo@ethz.ch \\
+%       \addr Department of Computer Science\\
+%       University of New York
+%       \AND
+%       \name Raia Hadsell \email raia@google.com \\
+%       \addr DeepMind
+%       \AND
+%       \name Hugo Larochelle \email hugolarochelle@google.com\\
+%       \addr Mila, Universit\'e de Montr\'eal \\
+%       Google Research\\
+%       CIFAR Fellow}
+
+% The \author macro works with any number of authors. Use \AND 
+% to separate the names and addresses of multiple authors.
+
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+
+\def\month{MM}  % Insert correct month for camera-ready version
+\def\year{YYYY} % Insert correct year for camera-ready version
+\def\openreview{\url{https://openreview.net/forum?id=XXXX}} % Insert correct link to OpenReview for camera-ready version
+
+\begin{document}
+
+
+\maketitle
+% \paragraph{Summary of Notation used:}
+% \begin{itemize}
+%     \item $\vparam \in \mathbb{R}^P$ denotes the network parameters.
+%     \item $\vx \in \mathbb{R}^d$ denotes the network input.
+%     \item $\vF(\vparam, \cdot) \in \mathbb{R}^O$ denotes the network output.
+%     \item $\vparam_t$ denotes the parameter vector obtained after learning task $t$.
+%     \item $\mathcal{D}_t$ is the dataset for task $t$.
+%     \item $\loss(\vparam, \data_i)$ is the loss on data $\data_i$
+%     \item $\loss(\vparam, x_{1:t})= \loss(\vparam, \data_1) + \dots + \loss(\vparam, \data_t)$ is the multi-task loss on the first $t$ tasks.
+%     \item $\Delta_{t_1t_2} = \vparam_{t_2} - \vparam_{t_1}$ is the parameter displacement vector between tasks $t_1$ and $t_2$.
+%     \item $\hessian(\vparam, \data) = \nabla^2_{\vparam} \loss(\vparam; \data)$ is the Hessian of the loss with respect to $\vparam$ on dataset $\data$.
+% \end{itemize}
+
+% \newpage
+\begin{abstract}
+    ...
+\end{abstract}
+
+\section{Introduction}
+\label{sec:introduction}
+
+\todo{Maybe it would be nice to cite some old science fiction text or movie, or maybe some paper of the founding fathers of AI.} Since its inception, the common imaginary of artificial intelligence has been that of a system capable of learning continuously from experience and adapting on the fly to new circumstances. Despite adaptability being a long-standing goal of machine learning, its practical realization remains elusive. This limitation stems in part from the classical learning setup, which separates training and testing into two distinct phases. In this paradigm, most knowledge is acquired in one go during training, and the system is then deployed fully formed to perform its task. 
+
+While this approach provides stability and guarantees over performance, it also constrains adaptability. It was well suited for early machine learning applications in static environments---where the data distribution did not change over time---but has proven fundamentally limited in dynamic and open-ended settings, where the data is both abundant and non-stationary. The growing need for adaptability has motivated several influential research trends, including fine-tuning, meta-learning, and, more recently, post-training. Even the problems of out-of-distribution generalization and robustness to distribution shifts can be viewed as facets of the same overarching challenge: learning systems that adapt efficiently to changing data. The current paradigm of large foundation models, trained on broad datasets and subsequently adapted to new tasks through few-shot or lightweight fine-tuning, can be interpreted as an evolution of this need for adaptability \citep{brown_language_2020,radfordLearningTransferableVisual2021}.
+
+\paragraph{From static to continual learning.}
+Continual learning departs more radically from the classical setup by positing that learning is a continuous process. In this setting, a system is not considered “complete” at deployment; rather, it continues to learn and adapt as new data and tasks arrive. This change in paradigm raises fundamental questions about how to evaluate performance. In traditional machine learning, evaluation focuses on generalization—how well a model performs on unseen data from the same distribution. But in a continual learning setup, where data arrives as a non-stationary stream, this notion becomes ambiguous: what should the model generalize to?  
+One common perspective is that a continual learner should maintain good performance on all data encountered so far, minimizing so-called \emph{catastrophic forgetting}. Formally, given a stream of data $(x_1, x_2, \dots)$, the model parameters $\param_t$ at time $t$ should minimize the \emph{aggregate loss} $\loss(\param_t, x_{1:t})$, i.e., the average or cumulative loss on all previously seen samples. This view, adopted in most of the literature and benchmarks \citep{delangeContinualLearningSurvey2022,buzzegaRethinkingExperienceReplay2020,vandevenThreeTypesIncremental2022}, emphasizes retention over time as a core desideratum of continual learning.\todo{Add references on different evaluation metrics or alternative views.}
+
+\paragraph{Adaptability and computational constraints.}
+A crucial dimension of adaptability is speed: an adaptive system must not only learn effectively but also efficiently. This reveals a central tension that pervades continual learning research—the trade-off between performance and computational cost. More computation typically enables better retention and adaptation, but continual learning often operates under strict constraints on memory and processing time.  
+Traditionally, this constraint is modeled as a limit on the amount of past data that can be stored or revisited, reflecting practical considerations such as privacy or resource constraints. However, a more general and arguably more realistic formulation considers computation itself as the limiting factor—even if all past data were available, it may be computationally infeasible to process it fully \citep{kumarContinualLearningComputationally2023}. In this work, we adopt this broader view and characterize continual learning algorithms in terms of how their computational cost scales with the number of observations $t$. The aggregate loss $\loss(\param, x_{1:t})$ provides a conceptual upper bound, requiring $O(t)$ computation to evaluate.\todo{Double-check this claim.} We further distinguish between online and offline computation, which allows for a fairer comparison across algorithms.
+
+\paragraph{Continual learning as loss approximation.}
+The central idea of this review is that most existing continual learning algorithms can be understood as minimizing an \emph{approximation} of the aggregate loss, rather than the loss itself. In this view, the goal of continual learning is to approximate the aggregate loss within a constrained computational budget. This interpretation, while related to prior theoretical work, provides a unified lens through which different families of algorithms—regularization-based, replay-based, projection-based, and architecture-based—can be analyzed and compared.\todo{Mention related work framing CL as loss approximation.}  
+Framing continual learning as a problem of \emph{loss approximation} exposes the implicit assumptions underlying existing methods and clarifies the trade-offs they face. It also highlights equivalences between seemingly distinct approaches, and provides a foundation for studying continual learning from an optimization-theoretic perspective. As argued by \citet{lanzillottaLocalVsGlobal2024}, such an analysis reveals the structure of the approximations themselves and the conditions under which they succeed or fail.
+
+% Giulia: TBD — finalize once contributions are settled.
+\giulia{TBD. The introduction should be finalized only after the contributions and results are fully defined. This is a tentative draft.}
+
+\subsection{Contributions and structure of the paper}
+In this work we:
+\begin{itemize}
+    \item 
+\end{itemize}
+
+
+\section{Setup and Notation}
+\label{sec:setup}
+\todo{Add a summary of the notation somewhere in the paper.}
+
+Data arrives sequentially in time, and the learner must update its model continuously as new information becomes available. We denote by $x_t$ the data received at time $t$, and by $x_{i:j} = x_i, \dots, x_j$ the sequence of data observed in the interval $[i, j]$. The notation is intentionally generic: $x_t$ may denote a single sample, a mini-batch, or an entire dataset, depending on the context. Each sample may itself be a tuple $(x^{i}, x^{o})$, such as input–output pairs in supervised learning or state–action–reward tuples in reinforcement learning. Unless otherwise stated, we keep the internal structure of $x_t$ abstract. 
+
+We emphasize that the time index $t$ need not correspond to a task boundary: continual learning may be defined either in terms of a task sequence or a continuous stream of samples.
+In the task-based continual learning setup—widely adopted in the literature—each observation $x_t$ is associated with a distinct task or skill to be learned. In this case, we may refer to $x_t$ interchangeably as a \emph{task}.  
+\todo{Consider introducing the $\memory$ notation already here.}
+
+\vspace{0.5em}
+\noindent\textbf{Model and learning algorithm.}
+We distinguish between the \emph{model} and the \emph{learning algorithm}.  
+The model is a function $f \in \mathcal{F}$ parameterized by $\param \in \Theta$.  
+Throughout this work, we focus on neural networks, for which $\param$ represents the set of all trainable parameters (weights, biases, normalization parameters, etc.).  
+We denote a specific model instance by $f_\param$ or, equivalently, by $f(\param, x)$.  
+The output $f(\param, x)$ may be scalar or vector-valued, depending on the application, and we specify it when relevant.
+
+The learning algorithm produces a sequence of models $(f_1, f_2, \dots)$ over time, updating the parameters as new observations arrive.  
+This work primarily concerns the properties of these \emph{learning algorithms}: we review their design principles, theoretical foundations, and empirical trade-offs.
+
+\vspace{0.5em}
+\noindent\textbf{Generality of the setup.}
+This formulation is intentionally general: it applies across diverse learning paradigms—supervised, reinforcement, and generative learning alike.  
+Application-specific distinctions will be introduced where relevant, but the central principles discussed here are agnostic to the particular domain.  
+While many examples will be drawn from classification, the underlying analysis extends naturally to other modalities.
+
+\subsection{The Aggregate Loss}
+\label{ssec:multi-task-loss}
+
+The performance of the model on a data sample $x$ is quantified by a loss function
+\(
+\ell(\param, x) \in \mathbb{R}^+,
+\)
+where lower values correspond to better performance.  
+This abstract notation encompasses a wide range of standard objectives: for instance, in supervised learning, $\ell(\param, x)$ may represent the mean squared error or cross-entropy between the model outputs $f_\param(x^i)$ and the targets $x^o$; in autoregressive models, it may correspond to the negative log-likelihood of the sequence generated by $f_\param$.  
+When $x$ is a set of samples (e.g., a batch or dataset), $\ell(\param, x)$ denotes the average loss over the set.
+For brevity, we may denote $\ell(\param, x_t)$ as $\loss_t(\param)$, and equivalently write $\ell(f_\param, x_t)$ when emphasizing the functional dependence rather than the parameters.
+
+\vspace{0.5em}
+\noindent\textbf{Lifetime performance.}
+Given the instantaneous loss $\ell(\param, x_t)$, various formulations of \emph{lifetime performance} have been proposed in the literature.  
+These define how performance is aggregated over time and are central to the conceptual foundations of continual learning.  
+The choice of metric is not merely a matter of evaluation—it implicitly determines which learning behaviors are desirable, and therefore shapes algorithmic design.  
+Indeed, a key message of this review is that an algorithm cannot be understood independently of the metric it optimizes.  
+\todo{Add citation to joint work with Mandana, Razvan, and Claire.}
+A common choice—adopted in the majority of works—is the \emph{aggregate loss} (or \emph{multi-task loss} in task-based settings):
+\begin{equation}
+\label{eq:multi-task-objective}
+    \loss(\param, x_{1:t}) = \loss(\param, x_1) + \dots + \loss(\param, x_t) .
+\end{equation}
+For compactness, we will sometimes write $\loss_{1:t}(\param)$.
+This cumulative objective captures how well the model performs across its entire learning history.  
+Most continual learning benchmarks report interpretable metrics derived from this quantity, such as average accuracy or average forgetting.
+
+\vspace{0.5em}
+\noindent\textbf{Forgetting.}
+Forgetting quantifies the degradation in performance on previously seen data.  
+If $\param_t$ denotes the model parameters at time $t$, forgetting on a sample $x_i$ can be defined in terms of the loss difference:
+\begin{align}
+\label{eq:forgetting}
+    \delta \ell(\param_t, x_i)
+    &= \ell(\param_t, x_i) - \min_{k \in [1, t-1]} \ell(\param_k, x_i).
+\end{align}
+This definition ensures that \emph{positive forgetting} corresponds to a performance drop, while \emph{negative forgetting} indicates improvement or transfer.  
+Alternative formulations exist depending on the task and performance metric (e.g., accuracy or reward), but they are all conceptually related.  
+In general, algorithms that minimize the aggregate loss in~\cref{eq:multi-task-objective} tend to exhibit high average performance and low forgetting.
+
+
+\section{Continual Learning as Loss Approximation}
+\label{sec:loss-approximation}
+
+The objective introduced in~\cref{ssec:multi-task-loss} defines the ideal target of a continual learning algorithm.  
+At any time $t$, the algorithm should produce the model parameters that minimize the cumulative (aggregate) loss:
+\begin{align}
+    \label{eq:multi-task-optimal2}
+    \param_t^\star \in \argmin_\param \; \loss(\param, x_{1:t}).
+\end{align}
+The use of $\in$ rather than equality emphasizes that multiple minimizers typically exist.  
+From an optimization perspective, these minimizers are equivalent; yet, they may differ substantially in other respects—such as their bias toward particular tasks or their generalization to unseen data.  
+Neural networks further amplify this multiplicity due to symmetries in parameter space.  
+Crucially, the specific choice of $\param_t^\star$ influences the trajectory of subsequent solutions $(\param_{t+1}^\star, \param_{t+2}^\star, \dots)$, making the order of task presentation a decisive factor in determining the final solution, despite the apparent commutativity of the objective.
+
+\vspace{0.5em}
+There are many ways to search for a minimizer of the objective in~\cref{eq:multi-task-objective}.  
+Here, we focus on optimization-based methods, which remain the dominant and most versatile class of continual learning approaches.  
+The aggregate objective can equivalently be expressed as a constrained optimization problem that enforces stability on previously seen data:
+\begin{align}
+\label{eq:multi-task-objective-projection}
+    \min_\param \; \loss_t(\param)
+    \quad \text{subject to} \quad 
+    \loss(\param, x_{1:t-1}) \leq \epsilon(\param_{t-1}^\star),
+\end{align}
+where $\epsilon(\param_{t-1}^\star) = \loss(\param_{t-1}^\star, x_{1:t-1})$ is the loss attained on past data by the previously optimal parameters.  
+Thus, optimization-based continual learning methods can be formulated in two mathematically related but operationally distinct ways: a \emph{penalty form}, in which old losses are added to the current objective (Eq.~\ref{eq:multi-task-objective}); and a \emph{projection form}, in which updates are restricted to a region preserving past performance (Eq.~\ref{eq:multi-task-objective-projection}).
+Although not strictly equivalent—the projection form excludes solutions that sacrifice past performance—the two are connected by standard Lagrangian duality.  
+The constrained form, in particular, makes explicit the classical \emph{stability–plasticity trade-off}: improving performance on new data while preserving previous competence. 
+We now define a generic abstraction that encompasses both formulations through a generic \texttt{STEP} operator.
+
+\begin{defn}[Penalty \texttt{STEP}]
+\label{def:step-penalty-form}
+Let \texttt{BASE} be a generic base optimization operator.  
+Then the penalty form of the \texttt{STEP} operator is defined as:
+\begin{align}
+    \texttt{STEP}(\loss(\param, x_{1:t})) = \texttt{BASE}(\loss(\param, x_{1:t})).
+\end{align}
+\end{defn}
+
+\begin{defn}[Projection \texttt{STEP}]
+\label{def:step-projection-form}
+Let \texttt{BASE} be a generic base optimization operator and let $\param_r$ denote a reference point.  
+The projection form of the \texttt{STEP} operator is defined as:
+\begin{align}
+    & \mathrm{TR}_{t-1}(\param_r, x_{1:t-1}) = 
+        \{ \param : \loss(\param, x_{1:t-1}) \leq \loss(\param_r, x_{1:t-1}) \}, \\
+    & \texttt{STEP}(\loss(\param, x_{1:t})) 
+        = \Pi_{\mathrm{TR}_{t-1}(\param_r, x_{1:t-1})}
+        \; \texttt{BASE}(\loss_t(\param)).
+\end{align}
+The set $\mathrm{TR}_{t-1}(\param_r, x_{1:t-1})$ defines the \emph{trust region}, onto which updates are projected.
+\end{defn}
+
+\vspace{0.5em}
+For either form of the \texttt{STEP} operator, we define a generic optimization-based continual learning procedure that explicitly incorporates loss approximation.
+
+\begin{defn}[Optimization-based CL Algorithm]
+\label{def:cl-loss-approx}
+Let $g_{t-1}(\cdot)$ be an approximation of $\loss(\cdot, x_{1:t-1})$, and let \texttt{STEP} be any of the operators defined above.  
+Then the generic continual learning algorithm $\mathcal{C}$ proceeds as follows:
+\begin{center}
+\begin{minipage}{0.65\textwidth}
+\begin{algorithm}[H]
+\caption{Generic Continual Learning Algorithm $\mathcal{C}$}
+\label{alg:cl-loss-approx}
+$\param_0^\star = \param_0$ \tcp*{initialize}
+\For{$t = 1, \dots, T$}{
+    Observe $x_t$ \tcp*{new input or task}
+    $\param_0 = \param_{t-1}^\star$, $i=0$\;
+    \While{not converged}{
+        $\Delta_i \gets \texttt{STEP}(\loss_t(\param_i) + g_{t-1}(\param_i))$\;
+        $\param_{i+1} \gets \param_i + \Delta_i$\;
+        $i \gets i + 1$\;
+    }
+    $\param_t^\star \gets \param_i$ \tcp*{store new optimum}
+    Compute $g_t$ \tcp*{update loss approximation}
+}
+\Return $\param_T^\star$, $g_T$
+\end{algorithm}
+\end{minipage}
+\end{center}
+\end{defn}
+
+\vspace{0.5em}
+\noindent\textbf{Discussion.}
+Two main ingredients characterize this formulation: the loss approximation $g_{t-1}(\cdot)$ and the operator \texttt{STEP}.  
+Depending on the chosen \texttt{STEP}, different aspects of past losses must be approximated.  
+For instance, when \texttt{STEP} is in penalty form and based on a first-order method, the relevant equivalence is on the \emph{gradients} of the loss;  
+in the projection form, equivalence is on the \emph{feasible region} of the loss.  
+In practice, approximating the feasible set may be simpler than accurately reconstructing the gradients of all past losses.
+\todo{Include a short table later summarizing types of $g_t$ for different algorithms...}
+
+Function approximation and constrained optimization are both well-studied problems.  
+Viewing continual learning through this lens not only unifies existing algorithms but also opens the door to a more systematic theoretical analysis.  
+In the following sections, we adopt this viewpoint to interpret several families of continual learning methods as specific instances of~\cref{def:cl-loss-approx}, characterized by distinct choices of \texttt{STEP} and $g$.
+
+\noindent\emph{Notation.}  
+When writing $g_t(\param)$, we refer to an approximation of $\loss(\param, x_{1:t})$;  
+when writing $g(\param, x)$, we refer to an approximation of $\loss(\param, x)$ for a generic $x$.
+
+\subsection{Assessing Computational Complexity}
+Any continual learning algorithm defined by~\cref{def:cl-loss-approx} naturally decomposes into two phases.  
+For each new observation $x_t$, the algorithm performs:
+% \begin{enumerate}
+    (1) a {processing step} (the inner loop of~\cref{alg:cl-loss-approx}), producing a new parameter estimate $\param_t^\star$, and  
+    (2) an {update step}, where the loss approximation $g_t(\param)$ is recomputed.
+% \end{enumerate}
+We impose no assumptions on the duration of the processing step: in the standard (task-based) scenario, each task can be processed for multiple optimization steps; in online continual learning, only a single pass over the data may be permitted.
+
+\vspace{0.5em}
+Based on this two-phase structure, we distinguish between:
+\begin{itemize}
+    \item \textbf{Online operations:} computations within the inner loop, repeated potentially multiple times per observation.
+    \item \textbf{Offline operations:} computations between observations, primarily those needed to update $g_t(\param)$.  
+    These are typically performed once per observation (or every $K$ observations, in sparse update schemes).
+\end{itemize}
+
+This distinction is crucial for evaluating the overall computational cost of a CL algorithm.  
+Historically, many studies have compared methods based solely on their online efficiency, neglecting the offline costs associated with maintaining or updating the approximation $g_t$.  
+In practice, the most effective algorithm achieves an optimal trade-off between online and offline computation—balancing immediate responsiveness with long-term stability.
+
+
+\section{A review of existing algorithms}
+\label{sec:review}
+
+\todo{Note for self here}
+% PLAN:
+% We'll review the main CL approaches as in the classic categorization, 
+% while connecting to current trends (e.g., LLM fine-tuning and PEFT).
+% It might be worth a short section in the intro noting that LLMs also suffer from forgetting.
+% At the end of the review, emphasize that despite the large number of algorithms,
+% theoretical understanding has lagged behind — motivating our framework.
+% Main insight: most progress in CL can be traced back to three ideas:
+% (1) replay (30 years ago), (2) parameter isolation (10 years ago),
+% and (3) pretraining / lazy adaptation. Everything else is a mix thereof.
+% Mention Prabhu’s work explicitly.
+%
+% Nice possible sentence: 
+% "We seek to contribute to understanding the fundamental ideas of CL and 
+% highlight its many theoretical and empirical open problems. In doing so, 
+% we focus on methods that improve, reinterpret, or analyze replay-based strategies, 
+% as replay remains the central empirical backbone of most successful CL algorithms."
+
+In reviewing the literature, we follow the standard categorization of continual learning (CL) methods, which—with minor variations—has been adopted across multiple surveys \citep{parisiContinualLifelongLearning2019,delangeContinualLearningSurvey2022}.  
+In particular, we take as reference the taxonomy proposed by \citet{wangComprehensiveSurveyContinual2024a}, which divides the literature into five broad classes:  
+\emph{replay}, \emph{regularization}, \emph{optimization-based}, \emph{architecture-based}, and \emph{representation-based} methods.  
+
+Each of these classes can be further subdivided, leading to a complex, hierarchical landscape of algorithms.  
+However, this classification, while exhaustive, often obscures conceptual equivalences:  
+methods that appear distinct algorithmically may in fact implement the same underlying principle of avoiding forgetting.  
+Furthermore, the boundaries between categories are porous—algorithms often combine multiple mechanisms (e.g., regularization with replay).  
+In the following, we re-interpret these categories under the theoretical lens of \cref{def:cl-loss-approx}, showing that most continual learning algorithms can be viewed as particular instantiations of the generic optimization framework introduced above.
+
+\subsection{Replay}
+\label{ssec:replay}
+
+Experience replay (ER) is the oldest and arguably most influential class of continual learning (CL) algorithms.  
+First introduced by \citet{robinsCatastrophicForgettingNeural1993,robinsCatastrophicForgettingRehearsal1995}, it was inspired by hippocampal replay mechanisms observed in biological memory consolidation \citep{hayesReplayDeepLearning2021}.  
+Remarkably, despite its age, replay remains among the strongest baselines even today \citep{buzzegaRethinkingExperienceReplay2020,buzzegaDarkExperienceGeneral2020}.  
+Recent large-scale architectures, including LLMs, also rely implicitly on replay-like mechanisms through continual pretraining or mixture-of-experts routing \todo{Add explicit LLM reference}.  
+Below, we review how replay-based methods have evolved along several key design axes.
+
+\paragraph{Experience Replay (ER).}  
+The standard ER algorithm approximates the cumulative loss over past data by sampling a subset of $B$ stored examples:
+\begin{align*}
+& g_{t-1}(\param) = \loss(\param, \mathcal{B}_{t-1}), \\
+& \mathcal{B}_{t-1} \subset x_{1:t-1}, \qquad |\mathcal{B}_{t-1}| = B.
+\end{align*}
+When $B = t-1$, ER recovers the original aggregate objective.  
+Larger buffers yield better approximations, but also higher computational cost.  
+Thus, the buffer size (or equivalently, the fraction of past data replayed per step) directly controls the trade-off between performance and compute.
+
+\paragraph{Generative replay.}
+A natural generalization is to replace the fixed buffer with a learned generative model $\mathcal{G}$ that approximates the past data distribution:
+\[
+\texttt{STEP}(\loss(x_{1:t-1})) 
+\approx \texttt{STEP}\!\left(\mathbb{E}_{x \sim \mathcal{G}}[\loss(x)]\right).
+\]
+Introduced by \citet{shinContinualLearningDeep2017}, this idea employs GANs to synthesize pseudo-samples of previous tasks.  
+However, generative replay inherits two main challenges:  
+(1) training the generator continually increases the overall computational cost, and  
+(2) the generator itself suffers from forgetting.  
+To address the first issue, \citet{liuGenerativeFeatureReplay2020} proposed generating features rather than raw inputs—requiring an additional CL mechanism to stabilize the feature extractor.  
+Recent work explores diffusion-based generators \citep{gaoDDGRContinualLearning2023,kimDiffusionMeetsFewshot2025}, further blurring the line between replay and generative modeling.  
+With the rise of powerful generative models, the CL community has also begun to study the continual training of generators themselves \citep{guoComprehensiveSurveyContinual2025}.
+
+\paragraph{Better memories.}
+Because the computational cost of ER scales with buffer size $B$, a major research direction focuses on selecting smaller yet more informative buffers:
+\[
+\mathcal{B}_{t-1} = 
+\argmin_{S, |S| = B}
+\texttt{STEP}(\loss_t + \loss(S)) 
+\approx \texttt{STEP}(\loss(x_{1:t})), 
+\quad S \subseteq x_{1:t-1}.
+\]
+The objective is to select a subset that best preserves the optimization trajectory of the full aggregate loss.  
+When \texttt{STEP} is gradient-based, this translates to choosing samples whose gradients best approximate those of the full dataset.  
+Gradient-based coreset selection has been widely studied \citep{aljundiGradientBasedSample2019,borsosCoresetsBilevelOptimization2020a,yoonOnlineCoresetSelection2021,tiwariGCRGradientCoreset2022}, though often at high computational cost.  
+
+Many methods employ meta-learning \citep{riemerLearningLearnForgetting2018}, influence estimation \citep{sunExploringExampleInfluence2022}, or bilevel optimization \citep{aljundiOnlineContinualLearning2019,chaudhryUsingHindsightAnchor2021}, which further increase offline complexity.  
+This raises a fundamental question:  
+\emph{if the same additional compute were used to replay more samples uniformly, would performance still improve?}
+
+Empirical results from \citet{prabhuComputationallyBudgetedContinual2023} suggest not: under a fixed compute budget, “\emph{costly sampling strategies perform significantly worse than simple uniform replay}.”  
+By contrast, in reinforcement learning, prioritized replay has proven effective at accelerating convergence \citep{schaulPRIORITIZEDEXPERIENCEREPLAY2016}, motivating extensive work on buffer optimization and sampling strategies \citep{zhaExperienceReplayOptimization2019,sunAttentiveExperienceReplay2020,nevesWhenLessMay2022}.  
+We refer readers to \citet{nevesAdvancesChallengesLearning2024} for a detailed survey.  
+This contrast raises an open question:  
+is the discrepancy due to the stronger non-stationarity of RL—where each policy update shifts the data distribution—or has supervised CL simply not yet found its “prioritized” equivalent?
+
+\paragraph{Better approximations.}
+An orthogonal approach to reducing buffer size is to improve the functional approximation $g_{t-1}$.  
+Several methods modify the form of $g$ while keeping the buffer fixed, e.g., \citet{rebuffiICaRLIncrementalClassifier2017,houLearningUnifiedClassifier2019a,simonLearningGeodesicPath2021,iscenMemoryEfficientIncrementalLearning2020}.  
+A particularly influential variant is \emph{Dark Experience Replay} (DER) \citep{buzzegaDarkExperienceGeneral2020,boschiniClassIncrementalContinualLearning2023}, which augments ER with a distillation term:
+\[
+g(\param, x_i) = \loss(\param, (x_i^{i}, \tilde{x}_i^o)), 
+\qquad \tilde{x}_i^o = f_{\theta_i^\star}(x_i^{i}).
+\]
+This simple modification yields substantial gains—especially for small buffers—without increasing computational cost.  
+Interestingly, earlier distillation-based methods such as LwF \citep{liLearningForgetting2017a} and iCaRL \citep{rebuffiICaRLIncrementalClassifier2017} perform worse, likely due to less effective teacher selection: DER uses the online model as the teacher, rather than a task-end snapshot.\todo{Add note clarifying this difference.}  
+A natural open question is whether DER’s improvement stems primarily from better gradient approximation or from an implicit regularization effect during optimization.
+
+Another line of work employs a local first-order approximation of past losses, leading to the \emph{projection-based} replay family.  
+Gradient Episodic Memory (GEM) \citep{lopez-pazGradientEpisodicMemory2017} constrains updates to avoid increasing any replay loss:
+\[
+g(\param + \delta, x) \approx \loss(\param, x) + 
+\delta^\top \nabla_\param \loss(\param, x)
+\]
+Then the feasible set (trust region) at time $t$ is defined as:
+\[
+\mathrm{TR}_{t-1}(\param, \mathcal{B}_{t-1}) = 
+\{\param + \delta \in \mathbb{R}^d \,|\, 
+\delta^\top \nabla_\param \loss(\param, x) \ge 0, 
+\;\forall x \in \mathcal{B}_{t-1}\}.
+\]
+This requires solving a quadratic program per iteration, making GEM computationally expensive due to per-sample gradient computations.  
+\citet{chaudhryEfficientLifelongLearning2019} proposed A-GEM, which enforces a single constraint on the average replay loss, achieving a more favorable trade-off between stability and efficiency.  
+
+\paragraph{Discussion.}
+Across the spectrum of replay algorithms, performance typically increases with buffer size $B$, while computational cost grows at least linearly.  
+Approaches that reduce $B$—through sampling, distillation, or constrained optimization—often shift the cost to more complex computations.  
+A unified analysis of the trade-offs between buffer size, approximation quality, and online/offline cost remains missing.  
+We summarize these trends in \cref{tab:replay-comparison}, which reports representative methods and their associated computational profiles.
+
+\giulia{Insert here a comparative table summarizing replay methods, form of $\texttt{STEP}$, approximation $g$, online/offline cost, buffer size, and key idea.}
+
+\subsection{Regularization}
+\label{sec:regularization}
+
+Regularization-based methods form one of the earliest and conceptually most elegant families of continual learning (CL) algorithms.  
+Their central idea is to preserve knowledge of past tasks by introducing an explicit regularizer into the loss function, penalizing parameter updates that would harm previous performance.  
+Formally, for a choice of regularizer $\mathcal{R}_{t-1}(\param)$, the aggregate loss is approximated as:
+\[
+    \texttt{STEP}\big(\loss_t(\param) + \mathcal{R}_{t-1}(\param)\big)
+    \approx 
+    \texttt{STEP}\big(\loss_{1:t}(\param)\big),
+\]
+where the regularizer serves as a surrogate for past tasks:
+\[
+    g_{t-1}(\param) = \mathcal{R}_{t-1}(\param).
+\]
+When \texttt{STEP} represents a gradient-based update, effectiveness requires
+$\nabla \mathcal{R}_{t-1}(\param) \approx \nabla \loss_{1:t-1}(\param)$,
+so that the regularizer reproduces the cumulative gradient of prior losses.  
+This gradient-matching view was made explicit in the \emph{K-priors} framework \citep{khanKnowledgeAdaptationPriors2021,daxbergerImprovingContinualLearning2023}, which designs $\mathcal{R}$ to reconstruct past gradients directly.
+
+\paragraph{Quadratic regularization.}
+The most widely used regularizers are quadratic in $\param$ and can be written as:
+\[
+    \mathcal{R}_{t-1}(\param) = 
+    (\param - \param_{t-1}^\star)^\top \mathbf{Q}_{t-1} (\param - \param_{t-1}^\star),
+\]
+where $\mathbf{Q}_{t-1}$ is a positive semi-definite matrix encoding the importance of each parameter.  
+Classic examples include Elastic Weight Consolidation (EWC) \citep{kirkpatrickOvercomingCatastrophicForgetting2017}, where $\mathbf{Q}_{t-1}$ is the diagonal of the Fisher Information Matrix (FIM),\footnote{$F(\param, \data_i) = \mathbb{E}_{(x, y) \sim \data_i}[\nabla_{\param} \log p(y \mid x; \param)]$.}  
+and related formulations such as Synaptic Intelligence (SI) \citep{zenkeContinualLearningSynaptic2017} and Memory Aware Synapses (MAS) \citep{aljundiGradientBasedSample2019}, which were later shown by \citet{benzingUnifyingRegularisationMethods2021} to be special cases of FIM-based approximations.
+
+Quadratic regularization naturally arises from a second-order Taylor expansion of the aggregate loss:
+\[
+\tau_2(\param; \loss_{1:t-1}, \param_0)
+    = \loss_{1:t-1}(\param_0)
+    + \nabla\loss_{1:t-1}(\param_0)^\top (\param - \param_0)
+    + \tfrac{1}{2}(\param - \param_0)^\top \nabla^2\loss_{1:t-1}(\param_0) (\param - \param_0).
+\]
+If the expansion center $\param_0$ is taken as the last solution $\param_{t-1}^\star$, the gradient term vanishes, and one recovers the quadratic form with $\mathbf{Q}_{t-1} = \nabla^2\loss_{1:t-1}(\param_{t-1}^\star)$.  
+In practice, computing or storing the full Hessian is infeasible, so efficient approximations are used—typically its diagonal, Kronecker-factored versions, or the Generalized Gauss–Newton (GGN) matrix \citep{ritterOnlineStructuredLaplace2018,yinOptimizationGeneralizationRegularizationbased2020,kirkpatrickOvercomingCatastrophicForgetting2017}.
+
+The success of quadratic regularization depends critically on how accurately $\mathcal{R}_{t-1}$ captures the curvature of the past loss surface.  
+More precise Hessian estimates improve performance but incur higher computational cost, leading to a fundamental trade-off between fidelity and efficiency.  
+Moreover, as noted by \citet{lanzillottaLocalVsGlobal2024}, a more fundamental issue arises: it remains unclear to what extent neural network loss surfaces can be meaningfully approximated by quadratic functions.
+This explains the strong sensitivity of these methods to hyperparameters influencing the local geometry—such as learning rate, batch size, and model capacity.
+
+\paragraph{Variational inference perspective.}
+A distinctive advantage of regularization-based methods is their close conceptual link to Bayesian learning.  
+Indeed, many can be reinterpreted as approximate Bayesian updates \citep{opperBayesianApproachOnline1999,khanBayesianLearningRule2024}.  
+In the Bayesian setting, the posterior after observing $x_t$ is given by:
+\[
+P(\param \mid x_{1:t}) \propto P(\param \mid x_{1:t-1})\, P(x_t \mid \param).
+\]
+Approximating this posterior via a variational distribution $q_t(\param)$ yields:
+\[
+q_t(\param) = 
+\arg\min_{q(\param)} \, \mathrm{D_{KL}}\!\left(q(\param) \,\|\, P(\param \mid x_{1:t})\right),
+\]
+which can be rewritten as:
+\[
+q_t(\param) = 
+\arg\min_{q(\param)} 
+\left\{
+\underbrace{\mathrm{D_{KL}}\!\left(q(\param) \,\|\, P(\param \mid x_{1:t-1})\right)}_{\text{prior term}}
+- \underbrace{\mathbb{E}_{q(\param)}[\log P(x_t \mid \param)]}_{\text{likelihood term}}
+\right\}.
+\]
+This \emph{Variational Continual Learning} (VCL) framework \citep{nguyenVariationalContinualLearning2018} and its extensions \citep{swaroopImprovingUnderstandingVariational2019,looGeneralizedVariationalContinual2020,tseranNaturalVariationalContinual2018} formalize continual learning as recursive Bayesian inference.  
+Typically, $q(\param)$ is chosen to be Gaussian or another exponential-family distribution, balancing tractability and expressiveness.  
+Richer posteriors yield more faithful updates but also higher cost—mirroring the trade-offs in quadratic regularization.
+
+The quadratic regularizer can be derived as a special case of this Bayesian formulation under a Laplace approximation and mean-field assumption, an instance of the \emph{delta method} \citep{oehlertNoteDeltaMethod1992}.  
+\citet{khanKnowledgeAdaptationPosterior2025} further formalize this connection, showing that EWC and related methods correspond to specific choices of approximate posteriors within this framework.
+
+\paragraph{Functional regularization.}
+An alternative Bayesian perspective arises when the posterior is expressed in \emph{function space} rather than parameter space, as in Gaussian Processes (GPs).  
+\citet{buiStreamingSparseGaussian2017a} extended sparse GPs to the streaming setting, enabling continual updates with complexity proportional to the number of inducing points.  
+\citet{titsiasFunctionalRegularisationContinual2019} adapted this idea to neural networks by using their feature maps as GP kernels.  
+When viewed as a regularizer, this induces a \emph{functional regularization} term \citep{panContinualDeepLearning2021} that penalizes deviations of the network’s outputs from previous posterior predictions at selected inducing points.  
+This perspective naturally bridges regularization- and replay-based methods: the inducing points play the role of a learned replay buffer in function space.
+
+\paragraph{Computational considerations.}
+Regularization methods incur most of their computational cost \emph{offline}, during the update of the regularizer at the end of each task (outer loop of \cref{alg:cl-loss-approx}).  
+Online updates are typically lightweight, requiring only the evaluation of $\mathcal{R}_{t-1}(\param)$.  
+This makes regularization approaches appealing for low-latency settings, though their offline complexity may grow with $t$ depending on how $\mathcal{R}_{t-1}$ or the posterior is updated.  
+Practical implementations often trade accuracy for efficiency by adopting low-rank or diagonal approximations. For example, in most quadratic methods, $\mathbf{Q}_{t-1}$ is typically additive across samples:
+$\mathbf{Q}_{t-1} = \sum_{i=1}^{t-1} q(x_i, \param_{t-1}^\star)$ for some function $q$.  
+To reduce cost, it is often updated iteratively as 
+$\hat{\mathbf{Q}}_{t-1} = \hat{\mathbf{Q}}_{t-2} + \Delta_{t-1}$, with $\Delta_{t-1} = q(x_{t-1}, \param_{t-1}^\star)$. This introduces an approximation error, which is greater on the older data $x_i, i \ll t$:
+\[
+\mathbf{Q}_{t-1} - \hat{\mathbf{Q}}_{t-1} 
+= \sum_{i=1}^{t-1} [q(x_i, \param_{t-1}^\star) - q(x_i, \param_i^\star)].
+\]
+Additionally, when $x_t$ consists of multiple samples, subsampling within each batch compounds the error, underscoring the practical trade-off between computational feasibility and regularization fidelity.
+
+
+\subsection{Optimization-based methods}
+\label{sec:optimization-based}
+
+Optimization-based continual learning algorithms are typically characterized by the use of a \emph{projection-form} update rule (\cref{def:step-projection-form}), where the projection operator and trust region $\mathrm{TR}(\param)$ are defined explicitly.  
+The Gradient Episodic Memory (GEM) algorithm, previously discussed among replay-based approaches, also falls into this category.  
+However, unlike GEM—which updates its trust region approximation at every optimization step—most optimization-based algorithms define or update it only once per task.  
+This design choice substantially reduces computational cost, but at the expense of approximation accuracy or learning plasticity, as we will see.
+
+A representative example is \emph{Orthogonal Gradient Descent} (OGD) \citep{farajtabarOrthogonalGradientDescent2020}, which enforces the following orthogonality constraint on the network’s \emph{function gradients}:
+\[
+\delta^\top \nabla_\param f_k(\param_{t-1}^\star, x) = 0 
+\quad \forall \, x \in \memory_{t-1}, \; k \in [C],
+\]
+where $C$ denotes the number of output units and $\memory_{t-1}$ is a subset of past data $x_{1:t-1}$ available at time $t$.
+
+\paragraph{Quadratic approximation interpretation.}
+This orthogonality condition can be derived from a quadratic approximation of the past losses.  
+Consider the trust region centered at $\param_{t-1}^\star$:
+\[
+\mathrm{TR}_{t-1}(\param) 
+= \{\param_{t-1}^\star + \delta \in \mathbb{R}^d 
+  \mid \loss(\param_{t-1}^\star + \delta, x) = \loss(\param_{t-1}^\star, x), \;
+  \forall\,x \in \memory_{t-1}\}.
+\]
+Using a second-order expansion, we approximate:
+\[
+g_{t-1}(\param_0 + \delta, x)
+\approx
+\loss(\param_0, x)
++ \nabla_\param \loss(\param_0, x)^\top \delta
++ \tfrac{1}{2}\, \delta^\top \mathbf{G}(\param_0, x)\, \delta,
+\]
+where $\mathbf{G}(\param_0, x)$ denotes the \emph{Generalized Gauss–Newton (GGN)} approximation of the Hessian:
+\[
+\mathbf{G}(\param_0, x) 
+= \sum_{k=1}^C \partial_{f_k}^2 \loss(\param_0, x)
+  \big[ \nabla_\param f_k(\param_0, x)\, \nabla_\param f_k(\param_0, x)^\top \big].
+\]
+Recognizing that 
+$\nabla_\param \loss(\param_0, \memory_{t-1})
+= \sum_{k \in [C]} \partial_{f_k} \loss(\param_0, \memory_{t-1}) \nabla_\param f_k(\param_0, \memory_{t-1})$,
+the trust region can equivalently be expressed (in a subset sense) as
+\[
+\mathrm{TR}_{t-1}(\param)
+= \{\param_{t-1}^\star + \delta 
+\mid 
+\delta^\top \nabla_\param f_k(\param_{t-1}^\star, x) = 0, 
+\;\forall\,x \in \memory_{t-1}, k \in [C]\},
+\]
+which coincides with the OGD condition.
+
+
+\paragraph{Layer-wise projection: Gradient Projection Memory (GPM).}
+An influential extension of OGD is \emph{Gradient Projection Memory} (GPM) \citep{sahaGradientProjectionMemory2021}, which enforces orthogonality in a layer-wise manner.  
+Let the network decompose as:
+\begin{align*}
+    & z_l(\param, x) = W_l\, p_{l-1}(\param, x), & z_L(x) = f(\param, x),\\
+    & p_l(\param, x) = \phi(z_l(\param, x)), & p_0(\param, x) = x.
+\end{align*}
+The gradient of the $k$-th output with respect to the layer weights is
+$\nabla_{W_l} f_k(\param, x) = \partial_{z_l} f_k(\param, x)\, p_{l-1}(\param, x)^\top$.  
+Let $\Delta_l$ denote the update to layer $l$.  
+GPM imposes the orthogonality condition
+\[
+\Delta_l\, p_{l-1}(\param_{t-1}^\star, x) = 0
+\quad \forall \, x \in \memory_{t-1}, k \in [C].
+\]
+By the layer-wise decomposition, this implies
+\[
+\mathrm{tr}\!\left(\Delta_l\, \nabla_{W_l} f_k(\param_{t-1}^\star, x)^\top\right)
+= \mathrm{vec}(\Delta_l)^\top 
+  \mathrm{vec}\!\left(\nabla_{W_l} f_k(\param_{t-1}^\star, x)\right) 
+= 0,
+\]
+where we can recognise a layer-wise formulation of OGD’s orthogonality condition.  
+Importantly, the linearity of each layer function ensures that, for all $x \in \memory_{t-1}$,
+\[
+z_l(\param + \delta, x)
+= (W_l + \Delta_l)\, p_{l-1}(\param + \delta, x)
+= W_l\, p_{l-1}(\param + \delta, x),
+\]
+meaning that the layer function—and thus its gradients—remain constant within the trust region.  
+Consequently, GPM preserves the validity of its approximation throughout training.
+
+
+Follow-up work has extended GPM with more flexible, data-dependent feature subspaces that enable partial backward transfer and re-use of protected feature subspaces \citep{dengFlatteningSharpnessDynamic2021,linNotForgettingContinualLearning2022,linTRGPTrustRegion2022}.  
+Nevertheless, empirical gains on standard continual learning benchmarks remain modest, suggesting that the full potential of layer-wise orthogonality remains underexplored.
+
+
+\paragraph{Implicit bias.}
+A parallel line of research investigates the role of the \emph{optimization dynamics} themselves in preserving past knowledge, even without explicit loss approximations.  
+\citet{mirzadehUnderstandingRoleTraining2020} observed that higher learning rates, smaller batch sizes, and dropout can implicitly mitigate forgetting, corresponding to an \emph{implicit regularization} effect of the optimizer.  
+Similarly, \citet{mirzadehLinearModeConnectivity2020} showed that gradient descent on the multi-task loss tends to produce a sequence of minima $\param_1^\star, \param_2^\star, \ldots, \param_C^\star$ connected by nearly linear low-loss paths.  
+Building on this observation, they proposed constraining updates to remain on such low-loss manifolds, thereby encouraging implicit alignment with the multi-task optimum.  
+These methods highlight how the geometry of the optimization trajectory itself can bias learning towards solutions that generalize across tasks.
+
+\paragraph{Computational cost and performance tradeoffs.}
+Optimization-based methods span a wide spectrum in terms of computational complexity and representational efficiency.  
+GEM adopts the most accurate approximation, as it recomputes the projection constraint at every optimization step, ensuring that the loss on previous observations does not increase.  
+However, this frequent update incurs a quadratic cost in the number of tasks $t$ and scales poorly in large continual learning setups.  
+OGD reduces this cost substantially by constructing the projection space only once per observation (or per task), using function gradients computed offline.  
+This one-shot approximation yields faster updates but introduces \emph{staleness}: gradients no longer reflect the current loss landscape as the parameters evolve, leading to diminished approximation fidelity and the suppression of beneficial backward transfer.  
+In practice, OGD and related methods further reduce cost by subsampling past data when computing the projection basis, or by reusing gradient statistics $\{\nabla_\param f_k(\param_i^\star, x_i)\}_{i \in \memory_{t-1}}$ computed in earlier episodes without refreshing them.  
+While this improves scalability, it compounds the approximation error and may lead to suboptimal projections as the model drifts.  
+GPM refines the tradeoff by enforcing layer-wise orthogonality, where the local linearity of each layer ensures the validity of the projection without requiring frequent recomputation.  
+This design preserves efficiency and stability but restricts updates to narrower feature subspaces, thereby consuming representational capacity more quickly and limiting flexibility in later tasks.  
+Overall, a clear empirical trend emerges: tighter trust-region approximations and frequent projection updates yield stronger loss preservation but higher computation and memory costs, whereas coarser or layer-local approximations enhance scalability at the expense of adaptability and backward transfer.
+\giulia{Another table here}
+
+\subsection{Architecture-based}
+\label{sec:arch-based}
+
+Architecture-based algorithms explicitly allocate portions of the network to the processing of different inputs, in both the forward and backward passes—a strategy often referred to as \emph{conditional computation} \citep{bengioEstimatingPropagatingGradients2013,bengioConditionalComputationNeural2016,shazeerOutrageouslyLargeNeural2017}. 
+We formalize this allocation using a \emph{routing mechanism} $r(x, l) \in  \mathcal{S}([1,P])$, where $x$ is the input, $l$ may identify a property of the input (e.g., class or task label), and $\mathcal{S}([1,P])$ is the superset of network parameter indices. 
+In other words, $r(x,l)$ specifies which parameters are active for a given input.%
+\footnote{This defines a hard routing mechanism; soft routing can also be used, though it offers little computational or continual learning advantage in practice.}
+
+Most architecture-based continual learning (CL) methods rely on a task-structured input stream, using hard-coded routing to separate the parameters assigned to each task during the backward pass, while often sharing the forward computation across tasks. 
+Effectively, learning with only a subset of parameters is equivalent to a projected update (\cref{def:step-projection-form}) where the trust region is defined by the routing mechanism:
+\[
+\mathrm{TR}_{t-1}(\param) = \{\param + \delta \in \mathbb{R}^d \,|\, \delta_j = 0 \;\;\; \forall j \notin r(x_t,l_t)\}.
+\]
+Existing algorithms differ primarily in how they design $r(x_t,l_t)$ at each step~$t$. 
+
+\paragraph{Explicit mask learning.}
+A first family of methods directly \emph{learn} a binary mask over neurons or weights for each task, which implicitly defines a set of active parameters \citep{serraOvercomingCatastrophicForgetting2018,wortsmanSupermasksSuperposition2020,kangForgetfreeContinualLearning2022}. 
+Alternatively, pruning-based methods identify the important parameters at the end of each task, retaining them while freeing the remaining ones for future learning \citep{golkarContinualLearningNeural2019,mallyaPackNetAddingMultiple2018a,fernandoPathNetEvolutionChannels2017,rajasegaranRandomPathSelection2019,veniatEfficientContinualLearning2021}. 
+Other works partition the model into task-shared and task-specific parameters \citep{ebrahimiAdversarialContinualLearning2020,hurtadoOptimizingReusableKnowledge2021}, allowing partial re-use of knowledge while constraining interference. 
+However, parameter sharing reintroduces forgetting unless coupled with additional replay or regularization mechanisms to ensure that updates in shared subspaces remain beneficial to previous tasks.
+
+\paragraph{Dynamic network expansion.}
+A second strategy assigns task-specific parameters by dynamically \emph{expanding} the network architecture. 
+This is effectively equivalent to pre-partitioning a large network across tasks, while learning on progressively larger subsets, thereby reducing forward and backward computational load in early tasks. 
+Progressive Neural Networks \citep{rusuProgressiveNeuralNetworks2016} exemplify this approach, allocating new columns of parameters per task. 
+Follow-up works such as \citet{hungCompactingPickingGrowing2019} mitigate the growth of network size by combining masking and pruning, while \citet{kumarBayesianStructuralAdaptation2021} introduce a Bayesian formulation based on an Indian Buffet Process prior to control expansion adaptively. 
+
+A related line of work augments pre-trained networks with lightweight, task-specific modules called \emph{adapters} \citep{rebuffiLearningMultipleVisual2017,houlsbyParameterEfficientTransferLearning2019}. 
+Adapters greatly reduce the number of trainable parameters while maintaining strong performance, but their total number typically grows linearly with the number of tasks. 
+Recent extensions attempt to fix or merge adapters \citep{ermisMemoryEfficientContinual2023,zhangContinualSequenceGeneration2022,pfeifferAdapterFusionNonDestructiveTask2021}, though these approaches often rely on replay to mitigate forgetting in shared components. 
+Prompt- and prefix-tuning methods \citep{wangLearningPromptContinual2022,wangDualPromptComplementaryPrompting2022,smithCODAPromptCOntinualDecomposed2023} similarly introduce small task-specific learnable tokens or prefixes, which can be viewed as structured adapters \citep{heUnifiedViewParameterEfficient2022}.
+
+\paragraph{Mixture of Experts.}
+Finally, \emph{Mixture of Experts} (MoE) architectures represent the most general form of parameter isolation, where routing is itself a learned, data-dependent function. 
+Experts are typically subnetworks or parameter subsets of specific layers, while the rest of the model remains shared or frozen. 
+Early examples in CL include \citet{aljundiExpertGateLifelong2017} and \citet{collierRoutingNetworksCotraining2020}, where the gating function determines which expert to activate per input. 
+Subsequent work \citep{rameshModelZooGrowing2022} leveraged predictive accuracy to dynamically activate old experts for knowledge reuse. 
+Recently, MoE architectures have gained renewed attention in large-scale language models \citep{fedusSwitchTransformersScaling2022,duGLaMEfficientScaling2022,zhangLessBetterEfficient2025}, offering an efficient way to scale capacity without proportional increases in compute. 
+In continual learning, MoE approaches such as \citet{gururanganDEMixLayersDisentangling2021,chenLifelongLanguagePretraining2023} show improved task modularity and forward transfer, but still suffer from partial forgetting in shared layers unless complemented by replay or regularization.
+
+\paragraph{Computational cost and performance tradeoffs.}
+Architecture-based methods achieve robustness to forgetting by explicitly constraining parameter sharing across tasks, effectively defining disjoint trust regions through routing.  
+However, these gains come at the cost of reduced parameter efficiency and, in most cases, linear growth in model size.  
+Hard masking and dynamic expansion offer near-perfect preservation of past performance but waste network capacity and preclude beneficial backward transfer.  
+Conversely, methods with shared subspaces or adapters achieve better parameter reuse and computational efficiency but reintroduce interference, requiring replay or additional regularization --i.e. another approximation of the past loss.  
+In practice, architectures that combine data-dependent routing (e.g., learned gating or MoE) with more accurate approximation of past losses tend to offer the best tradeoff between adaptability and stability, albeit at higher training complexity.  
+Overall, the performance–efficiency landscape for architecture-based methods mirrors that of projection-based ones: methods that isolate parameters achieve stability but poor scalability, while those that share parameters scale better but require accurate approximations of past losses to prevent forgetting.
+
+\giulia{Here I think it would be nice to have a table showing that the models which share parameters have a lower performance unless they use replay ...}
+
+\subsection{Representation-based}
+\label{sec:representation-based}
+
+Representation-based algorithms propose yet another take on the continual learning problem (\cref{sec:loss-approximation}) by directly aiming to learn generalizable representations—ideally, those that would emerge from joint training.  
+To formalize this family of approaches, we decompose the network function into a \emph{feature map} $\phi$, parametrized by $\vartheta$, and a \emph{linear head} $h$:
+\begin{align*}
+    f(\theta, x) = (h \circ \phi)(x),
+\end{align*}
+where $\vartheta, W, b$ together make up $\theta$.  
+Given this decomposition, we redefine the continual learning optimum in terms of the feature map.  
+Let $h_{t,\phi}^\star$ denote the \emph{optimal head} minimizing the loss on the entire dataset given features $\phi$:
+\[
+h_{t,\phi}^\star = \argmin_{h}\left\{\, \loss(h \circ \phi, x_{1:t}) \,\right\}.
+\]
+Then, assuming access to the optimal head $h_{t,\phi}^\star$, the \emph{optimal feature map} is given by
+\begin{align}
+    \label{eq:optimal-feature-map}
+    {\phi^\star}_t \in \argmin_{\phi} \left\{\, \loss(h_{t,\phi}^\star \circ \phi, x_{1:t}) \,\right\}.
+\end{align}
+Since the head and backbone parameters are independent, this formulation cleanly separates optimization into two subproblems.  
+We note that this formalization of representation-based continual learning is, to our knowledge, introduced here for the first time.
+
+\paragraph{Feature forgetting.}
+Empirical evidence suggests that even without any explicit continual learning mechanism, knowledge encoded in intermediate representations is more stable than final performance \citep{hessKnowledgeAccumulationContinually2023,ramaseshAnatomyCatastrophicForgetting2020}.  
+This phenomenon—where the degradation in the feature extractor is milder than in the classifier—is known as \emph{feature forgetting}.  
+Concretely, the performance drop of the network $h_t \circ \phi_t$ is typically much larger than that of $h_{t,\phi}^\star \circ \phi_t$, where the head is re-optimized on all past data.  
+Although computing $h_{t,\phi}^\star$ requires full data access and is therefore diagnostic rather than practical, this insight highlights the disproportionate contribution of the head to forgetting.  
+Motivated by this, several works aim to approximate $h^\star$ without replay, while updating only the feature extractor via gradient descent \citep{houLearningUnifiedClassifier2019,wuLargeScaleIncremental2019a,zhaoMaintainingDiscriminationFairness2019}.
+
+\paragraph{On the role of the loss in reducing feature forgetting.}
+Even with an optimal head, representations learned by standard supervised objectives can drift over time.  
+A key observation in recent work is that this degradation can be mitigated by changing the training objective.  
+In particular, self-supervised learning tends to produce more stable representations across tasks \citep{madaanRepresentationalContinuityUnsupervised2022,purushwalkamChallengesContinuousSelfSupervised2022,davariProbingRepresentationForgetting2022,huHowWellDoes2022}.  
+Moreover, both supervised and self-supervised pre-training significantly improve downstream continual learning performance \citep{huHowWellDoes2022,mehtaEmpiricalInvestigationRole2023,ramaseshEffectScaleCatastrophic2021}.  
+Pre-trained representations exhibit higher stability and generalization, reducing the sensitivity of $\phi_t$ to task-specific updates.  
+Interestingly, increasing model size yields a similar stabilizing effect, but only under a lazy training regime, where large models remain close to their initialization \citep{graldiImportanceBeingLazy2025}.  
+Thus, even without explicitly searching for $\phi_t^\star$, both pre-training and self-supervision appear to yield features that evolve more smoothly over time and are less prone to disruptive changes—perhaps precisely because of their broader generalization.
+
+\paragraph{Feature projection methods.}
+Building on the constrained optimization interpretation of continual learning, one can reformulate the search for generalizable features as a constrained minimization problem.  
+Let $\Phi_{t-1}^\star$ denote the set of optimal feature maps for all past tasks.  
+Then \cref{eq:optimal-feature-map} can be rewritten as:
+\begin{align}
+    \label{eq:optimal-feature-map-constrained}
+    \phi^\star_t \in \argmin_{\phi} \left\{\, \loss(h_{t,\phi}^\star \circ \phi, x_{t}) \,\right\} 
+    \quad \text{s.t.} \quad 
+    \phi \in \Phi_{t-1}^\star.
+\end{align}
+Although not explicitly formalized as such in prior work, several methods can be interpreted as approximate solutions to this constrained problem.  
+They aim to learn a transformation mapping new task features back to old ones, thus preserving representational geometry.  
+For example, \citet{simonLearningGeodesicPath2021} use a distillation-like loss to maintain the geometric structure of the feature space, while \citet{josephEnergybasedLatentAligner2022} use an energy-based model to implicitly align new and old representations.  
+Contrastive methods such as \citet{finiSelfSupervisedModelsAre2022a,chaCo$^2$LContrastiveContinual2021} explicitly preserve representational structure via contrastive losses, while LUCIR \citep{houLearningUnifiedClassifier2019a} regularizes angular deviations in class embeddings.  
+
+Establishing a direct connection to the loss-approximation viewpoint is not straightforward, but it becomes clearer when considering the generalized loss where the head is optimal and only the features evolve.  
+In this case, loss approximation can be defined in feature space rather than parameter space, with any representational change evaluated by its induced loss variation.  
+Although this connection has not been rigorously formalized yet, we believe it provides a promising direction, given the many-to-one mapping between network parameters and feature representations.
+
+\paragraph{Computational cost and performance tradeoffs.}
+The cost of most representation-based approaches lies in computing auxiliary objectives—such as contrastive, distillation, or energy-based terms—often in feature space rather than parameter space, which can be amortized efficiently in modern frameworks.  
+Pre-training and self-supervised objectives substantially improve stability at negligible extra cost during continual learning itself, though they may require large upfront compute.  
+They forgo explicit loss approximation or parameter partitioning, instead relying on the inductive bias of learned features to preserve past knowledge.  
+However, their performance hinges on the quality and generality of the learned representations; without sufficiently rich pre-training or robust objectives, feature forgetting may still persist. 
+\giulia{I'm not really convinced of this conclusion. This category seems to be too "miscellaneous" to get to a unique conclusion.}
+
+\subsection{Final discussion.}
+Our review has revealed two central insights.
+\giulia{This conclusion is a draft.}
+
+First, all continual learning algorithms—regardless of their category—can be interpreted as relying on some form of approximation of the aggregate loss on data, whether defined in parameter space, input space, or feature space.  
+The quality of this approximation largely determines the algorithm’s success: higher-fidelity approximations yield better preservation of prior knowledge, but typically come at the cost of increased computation or reduced flexibility in adapting to new tasks.  
+This underlying tension directly manifests as the classical stability–plasticity tradeoff observed across continual learning methods.
+
+Second, our unified analysis exposes conceptual equivalences that are often overlooked in existing taxonomies.  
+For instance, parameter expansion methods and mixture-of-experts architectures share the same underlying principle of subspace allocation; projection-based approaches can be viewed as implicit parameter expansion in orthogonal directions; and both regularization and projection methods derive from quadratic approximations of the loss.  
+Finally, representation-based algorithms can be naturally interpreted as projection methods operating in feature space rather than parameter space.  
+By highlighting these connections, we aim to clarify the underlying optimization structure common to seemingly distinct approaches.
+
+\vspace{0.5em}
+\noindent
+\giulia{Here we could do a nice diagram of all optimization-based CL " prominent" algorithms based on the nature of their approximations/step functions.}
+A visual summary of these relationships—organized by the nature of their approximation and update step—can further illustrate the shared foundations of optimization-based continual learning methods.
+
+
+\section{Continual Learning used in practice}
+
+Discuss continual learning in applications today and which methods work best. 
+%https://arxiv.org/pdf/2509.13310 
+
+
+\section{Open Questions for Continual Learning Research}
+
+Here, we could collect in one place all the open questions which we believe are important for the progress in continual learning. These are theoretical questions, which lie at the heart of the problem and delineate a research program. 
+
+{No free lunch in continual learning: the trade-off between performance and memory/computational cost}
+\giulia{We need to cite these guys https://arxiv.org/pdf/2012.12631}
+
+
+\section{Subfields and related fields}
+
+Not sure if needed? A simple note to mention these:
+
+Loss of Plasticity
+
+Continual learning x RL 
+
+Continual learning x online learning 
+
+
+
+\section{Empirical Study}
+Not sure if needed? The idea is to empirically verify the tradeoff of quality of performance and computational cost for each algorithm. 
+
+\section{Related Work}
+\subsection{Existing categorisation of CL literature}
+
+There are several categorisation of CL algorithms . Here we mention all the classic categorization. 
+
+Then we talk about the bayesian view and we make the connection to our categorization ...
+\citet{farquhar_unifying_2019}
+
+Geometric intuition ...
+
+\section{Final Conclusions}
+
+\subsubsection*{Broader Impact Statement}
+In this optional section, TMLR encourages authors to discuss possible repercussions of their work,
+notably any potential negative impact that a user of this research should be aware of. 
+Authors should consult the TMLR Ethics Guidelines available on the TMLR website
+for guidance on how to approach this subject.
+
+\subsubsection*{Author Contributions}
+If you'd like to, you may include a section for author contributions as is done
+in many journals. This is optional and at the discretion of the authors. Only add
+this information once your submission is accepted and deanonymized. 
+
+\subsubsection*{Acknowledgments}
+Use unnumbered third level headings for the acknowledgments. All
+acknowledgments, including those to funding agencies, go at the end of the paper.
+Only add this information once your submission is accepted and deanonymized. 
+
+\bibliography{my_library}
+\bibliographystyle{tmlr}
+
+\newpage
+\appendix
+\section{Appendix}
+You may include other additional sections here.
+
+\end{document}

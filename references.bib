@@ -1,0 +1,1502 @@
+
+@article{singh_analytic_nodate,
+	title = {Analytic {Insights} into {Structure} and {Rank} of {Neural} {Network} {Hessian} {Maps}},
+	language = {en},
+	author = {Singh, Sidak Pal and Bachmann, Gregor and Hofmann, Thomas},
+}
+
+@misc{damian_self-stabilization_2023,
+	title = {Self-{Stabilization}: {The} {Implicit} {Bias} of {Gradient} {Descent} at the {Edge} of {Stability}},
+	shorttitle = {Self-{Stabilization}},
+	url = {http://arxiv.org/abs/2209.15594},
+	doi = {10.48550/arXiv.2209.15594},
+	abstract = {Traditional analyses of gradient descent show that when the largest eigenvalue of the Hessian, also known as the sharpness \$S({\textbackslash}theta)\$, is bounded by \$2/{\textbackslash}eta\$, training is "stable" and the training loss decreases monotonically. Recent works, however, have observed that this assumption does not hold when training modern neural networks with full batch or large batch gradient descent. Most recently, Cohen et al. (2021) observed two important phenomena. The first, dubbed progressive sharpening, is that the sharpness steadily increases throughout training until it reaches the instability cutoff \$2/{\textbackslash}eta\$. The second, dubbed edge of stability, is that the sharpness hovers at \$2/{\textbackslash}eta\$ for the remainder of training while the loss continues decreasing, albeit non-monotonically. We demonstrate that, far from being chaotic, the dynamics of gradient descent at the edge of stability can be captured by a cubic Taylor expansion: as the iterates diverge in direction of the top eigenvector of the Hessian due to instability, the cubic term in the local Taylor expansion of the loss function causes the curvature to decrease until stability is restored. This property, which we call self-stabilization, is a general property of gradient descent and explains its behavior at the edge of stability. A key consequence of self-stabilization is that gradient descent at the edge of stability implicitly follows projected gradient descent (PGD) under the constraint \$S({\textbackslash}theta) {\textbackslash}le 2/{\textbackslash}eta\$. Our analysis provides precise predictions for the loss, sharpness, and deviation from the PGD trajectory throughout training, which we verify both empirically in a number of standard settings and theoretically under mild conditions. Our analysis uncovers the mechanism for gradient descent's implicit bias towards stability.},
+	urldate = {2025-04-18},
+	publisher = {arXiv},
+	author = {Damian, Alex and Nichani, Eshaan and Lee, Jason D.},
+	month = apr,
+	year = {2023},
+	note = {arXiv:2209.15594 [cs]},
+	keywords = {Computer Science - Information Theory, Computer Science - Machine Learning, Mathematics - Information Theory, Mathematics - Optimization and Control, Statistics - Machine Learning},
+}
+
+@misc{song_does_2025,
+	title = {Does {SGD} really happen in tiny subspaces?},
+	url = {http://arxiv.org/abs/2405.16002},
+	doi = {10.48550/arXiv.2405.16002},
+	abstract = {Understanding the training dynamics of deep neural networks is challenging due to their high-dimensional nature and intricate loss landscapes. Recent studies have revealed that, along the training trajectory, the gradient approximately aligns with a low-rank top eigenspace of the training loss Hessian, referred to as the dominant subspace. Given this alignment, this paper explores whether neural networks can be trained within the dominant subspace, which, if feasible, could lead to more efficient training methods. Our primary observation is that when the SGD update is projected onto the dominant subspace, the training loss does not decrease further. This suggests that the observed alignment between the gradient and the dominant subspace is spurious. Surprisingly, projecting out the dominant subspace proves to be just as effective as the original update, despite removing the majority of the original update component. We observe similar behavior across practical setups, including the large learning rate regime (also known as Edge of Stability), Sharpness-Aware Minimization, momentum, and adaptive optimizers. We discuss the main causes and implications of this spurious alignment, shedding light on the dynamics of neural network training.},
+	urldate = {2025-04-18},
+	publisher = {arXiv},
+	author = {Song, Minhak and Ahn, Kwangjun and Yun, Chulhee},
+	month = mar,
+	year = {2025},
+	note = {arXiv:2405.16002 [cs]},
+	keywords = {Computer Science - Machine Learning, Mathematics - Optimization and Control, Statistics - Machine Learning},
+}
+
+@misc{sagun_empirical_2018,
+	title = {Empirical {Analysis} of the {Hessian} of {Over}-{Parametrized} {Neural} {Networks}},
+	url = {http://arxiv.org/abs/1706.04454},
+	doi = {10.48550/arXiv.1706.04454},
+	abstract = {We study the properties of common loss surfaces through their Hessian matrix. In particular, in the context of deep learning, we empirically show that the spectrum of the Hessian is composed of two parts: (1) the bulk centered near zero, (2) and outliers away from the bulk. We present numerical evidence and mathematical justifications to the following conjectures laid out by Sagun et al. (2016): Fixing data, increasing the number of parameters merely scales the bulk of the spectrum; fixing the dimension and changing the data (for instance adding more clusters or making the data less separable) only affects the outliers. We believe that our observations have striking implications for non-convex optimization in high dimensions. First, the flatness of such landscapes (which can be measured by the singularity of the Hessian) implies that classical notions of basins of attraction may be quite misleading. And that the discussion of wide/narrow basins may be in need of a new perspective around over-parametrization and redundancy that are able to create large connected components at the bottom of the landscape. Second, the dependence of small number of large eigenvalues to the data distribution can be linked to the spectrum of the covariance matrix of gradients of model outputs. With this in mind, we may reevaluate the connections within the data-architecture-algorithm framework of a model, hoping that it would shed light into the geometry of high-dimensional and non-convex spaces in modern applications. In particular, we present a case that links the two observations: small and large batch gradient descent appear to converge to different basins of attraction but we show that they are in fact connected through their flat region and so belong to the same basin.},
+	urldate = {2025-04-18},
+	publisher = {arXiv},
+	author = {Sagun, Levent and Evci, Utku and Guney, V. Ugur and Dauphin, Yann and Bottou, Leon},
+	month = may,
+	year = {2018},
+	note = {arXiv:1706.04454 [cs]},
+	keywords = {Computer Science - Machine Learning},
+}
+
+@misc{sagun_eigenvalues_2017,
+	title = {Eigenvalues of the {Hessian} in {Deep} {Learning}: {Singularity} and {Beyond}},
+	shorttitle = {Eigenvalues of the {Hessian} in {Deep} {Learning}},
+	url = {http://arxiv.org/abs/1611.07476},
+	doi = {10.48550/arXiv.1611.07476},
+	abstract = {We look at the eigenvalues of the Hessian of a loss function before and after training. The eigenvalue distribution is seen to be composed of two parts, the bulk which is concentrated around zero, and the edges which are scattered away from zero. We present empirical evidence for the bulk indicating how over-parametrized the system is, and for the edges that depend on the input data.},
+	urldate = {2025-04-18},
+	publisher = {arXiv},
+	author = {Sagun, Levent and Bottou, Leon and LeCun, Yann},
+	month = oct,
+	year = {2017},
+	note = {arXiv:1611.07476 [cs]},
+	keywords = {Computer Science - Machine Learning},
+}
+
+@misc{gur-ari_gradient_2018,
+	title = {Gradient {Descent} {Happens} in a {Tiny} {Subspace}},
+	url = {http://arxiv.org/abs/1812.04754},
+	doi = {10.48550/arXiv.1812.04754},
+	abstract = {We show that in a variety of large-scale deep learning scenarios the gradient dynamically converges to a very small subspace after a short period of training. The subspace is spanned by a few top eigenvectors of the Hessian (equal to the number of classes in the dataset), and is mostly preserved over long periods of training. A simple argument then suggests that gradient descent may happen mostly in this subspace. We give an example of this effect in a solvable model of classification, and we comment on possible implications for optimization and learning.},
+	urldate = {2025-04-18},
+	publisher = {arXiv},
+	author = {Gur-Ari, Guy and Roberts, Daniel A. and Dyer, Ethan},
+	month = dec,
+	year = {2018},
+	note = {arXiv:1812.04754 [cs]},
+	keywords = {Computer Science - Artificial Intelligence, Computer Science - Machine Learning, Statistics - Machine Learning},
+}
+
+@misc{hazan_introduction_2023,
+	title = {Introduction to {Online} {Convex} {Optimization}},
+	url = {http://arxiv.org/abs/1909.05207},
+	doi = {10.48550/arXiv.1909.05207},
+	abstract = {This manuscript portrays optimization as a process. In many practical applications the environment is so complex that it is infeasible to lay out a comprehensive theoretical model and use classical algorithmic theory and mathematical optimization. It is necessary as well as beneficial to take a robust approach, by applying an optimization method that learns as one goes along, learning from experience as more aspects of the problem are observed. This view of optimization as a process has become prominent in varied fields and has led to some spectacular success in modeling and systems that are now part of our daily lives.},
+	urldate = {2025-04-18},
+	publisher = {arXiv},
+	author = {Hazan, Elad},
+	month = aug,
+	year = {2023},
+	note = {arXiv:1909.05207 [cs]},
+	keywords = {Computer Science - Machine Learning, Mathematics - Optimization and Control, Statistics - Machine Learning},
+}
+
+@article{daxberger_improving_nodate,
+	title = {Improving {Continual} {Learning} by {Accurate} {Gradient} {Reconstructions} of the {Past}},
+	abstract = {Weight-regularization and experience replay are two popular continual-learning strategies with complementary strengths: while weight-regularization requires less memory, replay can more accurately mimic batch training. How can we combine them to get better methods? Despite the simplicity of the question, little is known or done to optimally combine these approaches. In this paper, we present such a method by using a recently proposed principle of adaptation that relies on a faithful reconstruction of the gradients of the past data. Using this principle, we design a prior which combines two types of replay methods with a quadratic weight-regularizer and achieves better gradient reconstructions. The combination improves performance on standard task-incremental continual learning benchmarks such as Split-CIFAR, SplitTinyImageNet, and ImageNet-1000, achieving {\textgreater} 80\% of the batch performance by simply utilizing a memory of {\textless} 10\% of the past data. Our work shows that a good combination of the two strategies can be very effective in reducing forgetting.},
+	language = {en},
+	author = {Daxberger, Erik and Swaroop, Siddharth and Osawa, Kazuki},
+}
+
+@misc{farquhar_unifying_2019,
+	title = {A {Unifying} {Bayesian} {View} of {Continual} {Learning}},
+	url = {http://arxiv.org/abs/1902.06494},
+	doi = {10.48550/arXiv.1902.06494},
+	abstract = {Some machine learning applications require continual learning - where data comes in a sequence of datasets, each is used for training and then permanently discarded. From a Bayesian perspective, continual learning seems straightforward: Given the model posterior one would simply use this as the prior for the next task. However, exact posterior evaluation is intractable with many models, especially with Bayesian neural networks (BNNs). Instead, posterior approximations are often sought. Unfortunately, when posterior approximations are used, prior-focused approaches do not succeed in evaluations designed to capture properties of realistic continual learning use cases. As an alternative to prior-focused methods, we introduce a new approximate Bayesian derivation of the continual learning loss. Our loss does not rely on the posterior from earlier tasks, and instead adapts the model itself by changing the likelihood term. We call these approaches likelihood-focused. We then combine prior- and likelihood-focused methods into one objective, tying the two views together under a single unifying framework of approximate Bayesian continual learning.},
+	urldate = {2025-04-14},
+	publisher = {arXiv},
+	author = {Farquhar, Sebastian and Gal, Yarin},
+	month = feb,
+	year = {2019},
+	note = {arXiv:1902.06494 [stat]},
+	keywords = {Computer Science - Machine Learning, Statistics - Machine Learning},
+}
+
+@article{kurle_continual_2020,
+	title = {{CONTINUAL} {LEARNING} {WITH} {BAYESIAN} {NEURAL} {NETWORKS} {FOR} {NON}-{STATIONARY} {DATA}},
+	abstract = {This work addresses continual learning for non-stationary data, using Bayesian neural networks and memory-based online variational Bayes. We represent the posterior approximation of the network weights by a diagonal Gaussian distribution and a complementary memory of raw data. This raw data corresponds to likelihood terms that cannot be well approximated by the Gaussian. We introduce a novel method for sequentially updating both components of the posterior approximation. Furthermore, we propose Bayesian forgetting and a Gaussian diffusion process for adapting to non-stationary data. The experimental results show that our update method improves on existing approaches for streaming data. Additionally, the adaptation methods lead to better predictive performance for non-stationary data.},
+	language = {en},
+	author = {Kurle, Richard and Cseke, Botond and Klushyn, Alexej},
+	year = {2020},
+}
+
+@misc{mirzadeh_linear_2020,
+	title = {Linear {Mode} {Connectivity} in {Multitask} and {Continual} {Learning}},
+	url = {http://arxiv.org/abs/2010.04495},
+	doi = {10.48550/arXiv.2010.04495},
+	abstract = {Continual (sequential) training and multitask (simultaneous) training are often attempting to solve the same overall objective: to find a solution that performs well on all considered tasks. The main difference is in the training regimes, where continual learning can only have access to one task at a time, which for neural networks typically leads to catastrophic forgetting. That is, the solution found for a subsequent task does not perform well on the previous ones anymore. However, the relationship between the different minima that the two training regimes arrive at is not well understood. What sets them apart? Is there a local structure that could explain the difference in performance achieved by the two different schemes? Motivated by recent work showing that different minima of the same task are typically connected by very simple curves of low error, we investigate whether multitask and continual solutions are similarly connected. We empirically find that indeed such connectivity can be reliably achieved and, more interestingly, it can be done by a linear path, conditioned on having the same initialization for both. We thoroughly analyze this observation and discuss its significance for the continual learning process. Furthermore, we exploit this finding to propose an effective algorithm that constrains the sequentially learned minima to behave as the multitask solution. We show that our method outperforms several state of the art continual learning algorithms on various vision benchmarks.},
+	urldate = {2025-04-14},
+	publisher = {arXiv},
+	author = {Mirzadeh, Seyed Iman and Farajtabar, Mehrdad and Gorur, Dilan and Pascanu, Razvan and Ghasemzadeh, Hassan},
+	month = oct,
+	year = {2020},
+	note = {arXiv:2010.04495 [cs]},
+	keywords = {Computer Science - Artificial Intelligence, Computer Science - Computer Vision and Pattern Recognition, Computer Science - Machine Learning},
+}
+
+@misc{mirzadeh_linear_2020-1,
+	title = {Linear {Mode} {Connectivity} in {Multitask} and {Continual} {Learning}},
+	url = {http://arxiv.org/abs/2010.04495},
+	doi = {10.48550/arXiv.2010.04495},
+	abstract = {Continual (sequential) training and multitask (simultaneous) training are often attempting to solve the same overall objective: to find a solution that performs well on all considered tasks. The main difference is in the training regimes, where continual learning can only have access to one task at a time, which for neural networks typically leads to catastrophic forgetting. That is, the solution found for a subsequent task does not perform well on the previous ones anymore. However, the relationship between the different minima that the two training regimes arrive at is not well understood. What sets them apart? Is there a local structure that could explain the difference in performance achieved by the two different schemes? Motivated by recent work showing that different minima of the same task are typically connected by very simple curves of low error, we investigate whether multitask and continual solutions are similarly connected. We empirically find that indeed such connectivity can be reliably achieved and, more interestingly, it can be done by a linear path, conditioned on having the same initialization for both. We thoroughly analyze this observation and discuss its significance for the continual learning process. Furthermore, we exploit this finding to propose an effective algorithm that constrains the sequentially learned minima to behave as the multitask solution. We show that our method outperforms several state of the art continual learning algorithms on various vision benchmarks.},
+	urldate = {2025-04-14},
+	publisher = {arXiv},
+	author = {Mirzadeh, Seyed Iman and Farajtabar, Mehrdad and Gorur, Dilan and Pascanu, Razvan and Ghasemzadeh, Hassan},
+	month = oct,
+	year = {2020},
+	note = {arXiv:2010.04495 [cs]},
+	keywords = {Computer Science - Artificial Intelligence, Computer Science - Computer Vision and Pattern Recognition, Computer Science - Machine Learning},
+}
+
+@article{de_lange_continual_2022,
+	title = {A {Continual} {Learning} {Survey}: {Defying} {Forgetting} in {Classification} {Tasks}},
+	volume = {44},
+	issn = {1939-3539},
+	shorttitle = {A {Continual} {Learning} {Survey}},
+	url = {https://ieeexplore.ieee.org/abstract/document/9349197},
+	doi = {10.1109/TPAMI.2021.3057446},
+	abstract = {Artificial neural networks thrive in solving the classification problem for a particular rigid task, acquiring knowledge through generalized learning behaviour from a distinct training phase. The resulting network resembles a static entity of knowledge, with endeavours to extend this knowledge without targeting the original task resulting in a catastrophic forgetting. Continual learning shifts this paradigm towards networks that can continually accumulate knowledge over different tasks without the need to retrain from scratch. We focus on task incremental classification, where tasks arrive sequentially and are delineated by clear boundaries. Our main contributions concern: (1) a taxonomy and extensive overview of the state-of-the-art; (2) a novel framework to continually determine the stability-plasticity trade-off of the continual learner; (3) a comprehensive experimental comparison of 11 state-of-the-art continual learning methods; and (4) baselines. We empirically scrutinize method strengths and weaknesses on three benchmarks, considering Tiny Imagenet and large-scale unbalanced iNaturalist and a sequence of recognition datasets. We study the influence of model capacity, weight decay and dropout regularization, and the order in which the tasks are presented, and qualitatively compare methods in terms of required memory, computation time, and storage.},
+	number = {7},
+	urldate = {2025-04-14},
+	journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+	author = {De Lange, Matthias and Aljundi, Rahaf and Masana, Marc and Parisot, Sarah and Jia, Xu and Leonardis, Aleš and Slabaugh, Gregory and Tuytelaars, Tinne},
+	month = jul,
+	year = {2022},
+	keywords = {Continual learning, Interference, Knowledge engineering, Learning systems, Neural networks, Task analysis, Training, Training data, catastrophic forgetting, classification, lifelong learning, neural networks, task incremental learning},
+	pages = {3366--3385},
+}
+
+@misc{li_learning_2017,
+	title = {Learning without {Forgetting}},
+	url = {https://arxiv.org/abs/1606.09282},
+	author = {Li, Zhizhong and Hoiem, Derek},
+	year = {2017},
+	note = {\_eprint: 1606.09282},
+}
+
+@article{van_de_ven_three_2022,
+	title = {Three types of incremental learning},
+	volume = {4},
+	url = {https://doi.org/10.1038/s42256-022-00568-3},
+	doi = {10.1038/s42256-022-00568-3},
+	journal = {Nature Machine Intelligence},
+	author = {van de Ven, Gido M and Tuytelaars, Tinne and Tolias, Andreas S},
+	year = {2022},
+	note = {Publisher: Nature Publishing Group},
+	pages = {1185--1197},
+}
+
+@inproceedings{schwarz_progress_2018,
+	series = {Proceedings of {Machine} {Learning} {Research}},
+	title = {Progress \&amp; {Compress}: {A} scalable framework for continual learning},
+	volume = {80},
+	booktitle = {Proceedings of the 35th {International} {Conference} on {Machine} {Learning}},
+	publisher = {PMLR},
+	author = {Schwarz, Jonathan and Czarnecki, Wojciech and Luketina, Jelena and Grabska-Barwinska, Agnieszka and Teh, Yee Whye and Pascanu, Razvan and Hadsell, Raia},
+	editor = {Dy, Jennifer and Krause, Andreas},
+	month = jul,
+	year = {2018},
+	pages = {4528--4537},
+}
+
+@inproceedings{yu_meta-world_2020,
+	title = {Meta-{World}: {A} {Benchmark} and {Evaluation} for {Multi}-{Task} and {Meta} {Reinforcement} {Learning}},
+	url = {http://proceedings.mlr.press/v119/yu20a.html},
+	doi = {10.48550/arXiv.1910.10897},
+	booktitle = {Proceedings of the {Conference} on {Robot} {Learning} ({CoRL})},
+	publisher = {PMLR},
+	author = {Yu, Ting and Quillen, Daniel and He, Zhizhong and Julian, Roberto and Hausman, Kyle and Finn, Chelsea and Levine, Sergey},
+	year = {2020},
+	pages = {1094--1100},
+}
+
+@article{li_learning_2017-1,
+	title = {Learning without forgetting},
+	url = {https://arxiv.org/abs/1606.09282},
+	journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+	author = {Li, Zhizhong and Hoiem, Derek},
+	year = {2017},
+	note = {Publisher: IEEE},
+	keywords = {Distillation},
+}
+
+@inproceedings{wu_is_2023,
+	title = {Is {Multi}-{Task} {Learning} an {Upper} {Bound} for {Continual} {Learning}?},
+	booktitle = {{ICASSP} 2023 - 2023 {IEEE} {International} {Conference} on {Acoustics}, {Speech} and {Signal} {Processing} ({ICASSP})},
+	author = {Wu, Zihao and Tran, Huy and Pirsiavash, Hamed and Kolouri, Soheil},
+	year = {2023},
+	pages = {1--5},
+}
+
+@phdthesis{ring_continual_1994,
+	address = {USA},
+	type = {{PhD} {Thesis}},
+	title = {Continual learning in reinforcement environments},
+	school = {University of Texas at Austin},
+	author = {Ring, Mark Bishop},
+	year = {1994},
+}
+
+@incollection{mccloskey_catastrophic_1989,
+	title = {Catastrophic interference in connectionist networks: {The} sequential learning problem},
+	volume = {24},
+	booktitle = {Psychology of learning and motivation},
+	publisher = {Elsevier},
+	author = {McCloskey, Michael and Cohen, Neal J},
+	year = {1989},
+	pages = {109--165},
+}
+
+@article{kirkpatrick_overcoming_2017,
+	title = {Overcoming catastrophic forgetting in neural networks},
+	volume = {114},
+	number = {13},
+	journal = {Proceedings of the National Academy of Sciences},
+	author = {Kirkpatrick, James and Pascanu, Razvan and Rabinowitz, Neil and Veness, Joel and Desjardins, Guillaume and Rusu, Andrei A. and Milan, Kieran and Quan, John and Ramalho, Tiago and Grabska-Barwinska, Agnieszka and {others}},
+	year = {2017},
+	note = {Publisher: National Acad Sciences},
+	pages = {3521--3526},
+}
+
+@article{yin_optimization_2020,
+	title = {Optimization and generalization of regularization-based continual learning: a loss approximation viewpoint},
+	journal = {arXiv preprint arXiv:2006.10974},
+	author = {Yin, Dong and Farajtabar, Mehrdad and Li, Ang and Levine, Nir and Mott, Alex},
+	year = {2020},
+}
+
+@inproceedings{ammar_online_2014,
+	title = {Online multi-task learning for policy gradient methods},
+	booktitle = {International conference on machine learning},
+	publisher = {PMLR},
+	author = {Ammar, Haitham Bou and Eaton, Eric and Ruvolo, Paul and Taylor, Matthew},
+	year = {2014},
+	pages = {1206--1214},
+}
+
+@article{lanzillotta_local_2024,
+	title = {Local vs {Global} continual learning},
+	journal = {arXiv preprint arXiv:2407.16611},
+	author = {Lanzillotta, Giulia and Singh, Sidak Pal and Grewe, Benjamin F and Hofmann, Thomas},
+	year = {2024},
+}
+
+@inproceedings{lecarpentier_lipschitz_2021,
+	title = {Lipschitz lifelong reinforcement learning},
+	volume = {35},
+	booktitle = {Proceedings of the {AAAI} {Conference} on {Artificial} {Intelligence}},
+	author = {Lecarpentier, Erwan and Abel, David and Asadi, Kavosh and Jinnai, Yuu and Rachelson, Emmanuel and Littman, Michael L},
+	year = {2021},
+	note = {Issue: 9},
+	pages = {8270--8278},
+}
+
+@inproceedings{silver_lifelong_2013,
+	title = {Lifelong machine learning systems: {Beyond} learning algorithms},
+	booktitle = {2013 {AAAI} spring symposium series},
+	author = {Silver, Daniel L and Yang, Qiang and Li, Lianghao},
+	year = {2013},
+}
+
+@incollection{thrun_lifelong_1995,
+	title = {Lifelong robot learning},
+	url = {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.71.3723&rep=rep1&type=pdf},
+	booktitle = {The biology and technology of intelligent autonomous agents},
+	publisher = {Springer},
+	author = {Thrun, Sebastian and Mitchell, Tom M},
+	year = {1995},
+	keywords = {Classics, Robotics},
+	pages = {165--196},
+}
+
+@article{pentina_lifelong_2015,
+	title = {Lifelong learning with non-iid tasks},
+	volume = {28},
+	journal = {Advances in Neural Information Processing Systems},
+	author = {Pentina, Anastasia and Lampert, Christoph H},
+	year = {2015},
+}
+
+@article{ritter_online_2018,
+	title = {Online structured laplace approximations for overcoming catastrophic forgetting},
+	volume = {31},
+	journal = {Advances in Neural Information Processing Systems},
+	author = {Ritter, Hippolyt and Botev, Aleksandar and Barber, David},
+	year = {2018},
+}
+
+@inproceedings{mallya_packnet_2018,
+	title = {Packnet: {Adding} multiple tasks to a single network by iterative pruning},
+	booktitle = {Proceedings of the {IEEE} conference on {Computer} {Vision} and {Pattern} {Recognition}},
+	author = {Mallya, Arun and Lazebnik, Svetlana},
+	year = {2018},
+	pages = {7765--7773},
+}
+
+@book{cesa-bianchi_prediction_2006,
+	title = {Prediction, learning, and games},
+	publisher = {Cambridge university press},
+	author = {Cesa-Bianchi, Nicolo and Lugosi, Gábor},
+	year = {2006},
+}
+
+@article{vapnik_principles_1991,
+	title = {Principles of risk minimization for learning theory},
+	volume = {4},
+	journal = {Advances in neural information processing systems},
+	author = {Vapnik, Vladimir},
+	year = {1991},
+}
+
+@article{schulman_proximal_2017,
+	title = {Proximal {Policy} {Optimization} {Algorithms}},
+	url = {https://arxiv.org/abs/1707.06347},
+	journal = {arXiv preprint arXiv:1707.06347},
+	author = {Schulman, John and Wolski, Filip and Dhariwal, Prafulla and Radford, Alec and Klimov, Oleg},
+	year = {2017},
+}
+
+@article{rusu_progressive_2016,
+	title = {Progressive neural networks},
+	journal = {arXiv:1606.04671},
+	author = {Rusu, A. A. and Rabinowitz, N. C. and Desjardins, G. and Soyer, H. and Kirkpatrick, J. and Kavukcuoglu, K. and Pascanu, R. and Hadsell, R.},
+	year = {2016},
+}
+
+@phdthesis{lecarpentier_reinforcement_2020,
+	type = {{PhD} {Thesis}},
+	title = {Reinforcement learning in non-stationary environments},
+	school = {Toulouse, ISAE},
+	author = {Lecarpentier, Erwan},
+	year = {2020},
+}
+
+@article{lin_self-improving_1992,
+	title = {Self-improving reactive agents based on reinforcement learning, planning and teaching},
+	volume = {8},
+	journal = {Machine learning},
+	author = {Lin, Long-Ji},
+	year = {1992},
+	note = {Publisher: Kluwer Academic Publishers},
+	pages = {293--321},
+}
+
+@inproceedings{lesort_rethinking_2022,
+	title = {Rethinking {Continual} {Learning} from a {Lifelong} {Learning} {Perspective}},
+	url = {https://openreview.net/pdf?id=Zy350cRstc6},
+	booktitle = {International {Conference} on {Learning} {Representations} ({ICLR})},
+	author = {Lesort, Timothée and Delange, Maxime and Twardowski, Bartlomiej and Gepperth, Alexander and Stojanov, Slobodan},
+	year = {2022},
+}
+
+@article{bornschein_sequential_2022,
+	title = {Sequential {Learning} {Of} {Neural} {Networks} for {Prequential} {MDL}},
+	journal = {arXiv preprint arXiv:2210.07931},
+	author = {Bornschein, Jorg and Li, Yazhe and Hutter, Marcus},
+	year = {2022},
+}
+
+@article{evron_joint_2024,
+	title = {The {Joint} {Effect} of {Task} {Similarity} and {Overparameterization} on {Catastrophic} {Forgetting}–{An} {Analytical} {Model}},
+	journal = {arXiv preprint arXiv:2401.12617},
+	author = {Evron, Itay and Goldfarb, Daniel and Weinberger, Nir and Soudry, Daniel and Hand, Paul},
+	year = {2024},
+}
+
+@inproceedings{aljundi_task-free_2019,
+	title = {Task-free continual learning},
+	booktitle = {Proceedings of the {IEEE}/{CVF} conference on computer vision and pattern recognition},
+	author = {Aljundi, Rahaf and Kelchtermans, Klaas and Tuytelaars, Tinne},
+	year = {2019},
+	pages = {11254--11263},
+}
+
+@inproceedings{silver_clear_2021,
+	title = {The {CLEAR} {Benchmark}: {Continual} {LEArning} on {Real}-{World} {Imagery}},
+	volume = {24},
+	booktitle = {Proceedings of the {Neural} {Information} {Processing} {Systems} {Track} on {Datasets} and {Benchmarks} 1 ({NeurIPS} {Datasets} and {Benchmarks} 2021)},
+	publisher = {Elsevier},
+	author = {Silver, Daniel L and Yang, Qiang and Li, Lianghao and McCloskey, Michael and Cohen, Neal J and Lin, Zhiqiu and Shi, Jia and Pathak, Deepak and Ramanan, Deva},
+	year = {2021},
+	pages = {109--165},
+}
+
+@article{he_task_2019,
+	title = {Task {Agnostic} {Continual} {Learning} via {Meta} {Learning}},
+	volume = {abs/1906.05201},
+	url = {https://arxiv.org/abs/1906.05201},
+	journal = {ArXiv},
+	author = {He, Xu and Sygnowski, Jakub and Galashov, Alexandre and Rusu, Andrei A. and Teh, Yee Whye and Pascanu, Razvan},
+	year = {2019},
+	keywords = {"Continual-Meta Learning"},
+}
+
+@inproceedings{lin_theory_2023,
+	title = {Theory on forgetting and generalization of continual learning},
+	booktitle = {International {Conference} on {Machine} {Learning}},
+	publisher = {PMLR},
+	author = {Lin, Sen and Ju, Peizhong and Liang, Yingbin and Shroff, Ness},
+	year = {2023},
+	pages = {21078--21100},
+}
+
+@article{khetarpal_towards_2022,
+	title = {Towards continual reinforcement learning: {A} review and perspectives},
+	volume = {75},
+	journal = {Journal of Artificial Intelligence Research},
+	author = {Khetarpal, Khimya and Riemer, Matthew and Rish, Irina and Precup, Doina},
+	year = {2022},
+	pages = {1401--1476},
+}
+
+@article{zhang_understanding_2021,
+	title = {Understanding deep learning (still) requires rethinking generalization},
+	volume = {64},
+	number = {3},
+	journal = {Communications of the ACM},
+	author = {Zhang, Chiyuan and Bengio, Samy and Hardt, Moritz and Recht, Benjamin and Vinyals, Oriol},
+	year = {2021},
+	note = {Publisher: ACM New York, NY, USA},
+	pages = {107--115},
+}
+
+@inproceedings{standley_which_2020,
+	title = {Which tasks should be learned together in multi-task learning?},
+	booktitle = {International {Conference} on {Machine} {Learning}},
+	publisher = {PMLR},
+	author = {Standley, Trevor and Zamir, Amir and Chen, Dawn and Guibas, Leonidas and Malik, Jitendra and Savarese, Silvio},
+	year = {2020},
+	pages = {9120--9132},
+}
+
+@inproceedings{herbster_tracking_1998,
+	title = {Tracking the best regressor},
+	booktitle = {Proceedings of the eleventh annual conference on {Computational} learning theory},
+	author = {Herbster, Mark and Warmuth, Manfred K},
+	year = {1998},
+	pages = {24--31},
+}
+
+@inproceedings{azar_minimax_2017,
+	title = {Minimax regret bounds for reinforcement learning},
+	booktitle = {International {Conference} on {Machine} {Learning}},
+	publisher = {PMLR},
+	author = {Azar, Mohammad Gheshlaghi and Osband, Ian and Munos, Rémi},
+	year = {2017},
+	pages = {263--272},
+}
+
+@inproceedings{aljundi_memory_2018,
+	title = {Memory {Aware} {Synapses}: {Learning} {What} (not) to {Forget}},
+	booktitle = {Proceedings of the {European} {Conference} on {Computer} {Vision} ({ECCV})},
+	publisher = {Springer},
+	author = {Aljundi, Rahaf and Lin, Min and Goujaud, Baptiste and Bengio, Yoshua},
+	year = {2018},
+	pages = {139--154},
+}
+
+@article{grunwald_minimum_2005,
+	title = {Minimum description length tutorial},
+	volume = {5},
+	journal = {Advances in minimum description length: Theory and applications},
+	author = {Grünwald, Peter},
+	year = {2005},
+	note = {Publisher: MIT press 5 Cambridge Center, Cambridge, MA 02412},
+	pages = {1--80},
+}
+
+@inproceedings{jacot_neural_2018,
+	title = {Neural {Tangent} {Kernel}: {Convergence} and {Generalization} in {Neural} {Networks}},
+	volume = {31},
+	url = {https://proceedings.neurips.cc/paper_files/paper/2018/file/5a4be1fa34e62bb8a6ec6b91d2462f5a-Paper.pdf},
+	booktitle = {Advances in {Neural} {Information} {Processing} {Systems}},
+	publisher = {Curran Associates, Inc.},
+	author = {Jacot, Arthur and Gabriel, Franck and Hongler, Clement},
+	editor = {Bengio, S. and Wallach, H. and Larochelle, H. and Grauman, K. and Cesa-Bianchi, N. and Garnett, R.},
+	year = {2018},
+}
+
+@article{besbes_non-stationary_2015,
+	title = {Non-stationary stochastic optimization},
+	volume = {63},
+	number = {5},
+	journal = {Operations research},
+	author = {Besbes, Omar and Gur, Yonatan and Zeevi, Assaf},
+	year = {2015},
+	note = {Publisher: INFORMS},
+	pages = {1227--1244},
+}
+
+@article{kearns_near-optimal_2002,
+	title = {Near-optimal reinforcement learning in polynomial time},
+	volume = {49},
+	journal = {Machine learning},
+	author = {Kearns, Michael and Singh, Satinder},
+	year = {2002},
+	note = {Publisher: Springer},
+	pages = {209--232},
+}
+
+@article{sener_multi-task_2018,
+	title = {Multi-task learning as multi-objective optimization},
+	volume = {31},
+	journal = {Advances in neural information processing systems},
+	author = {Sener, Ozan and Koltun, Vladlen},
+	year = {2018},
+}
+
+@article{caruana_multitask_1997,
+	title = {Multitask learning},
+	volume = {28},
+	journal = {Machine learning},
+	author = {Caruana, Rich},
+	year = {1997},
+	note = {Publisher: Springer},
+	pages = {41--75},
+}
+
+@article{lecarpentier_non-stationary_2019,
+	title = {Non-stationary {Markov} decision processes, a worst-case approach using model-based reinforcement learning},
+	volume = {32},
+	journal = {Advances in neural information processing systems},
+	author = {Lecarpentier, Erwan and Rachelson, Emmanuel},
+	year = {2019},
+}
+
+@inproceedings{zhou_online_2012,
+	title = {Online incremental feature learning with denoising autoencoders},
+	booktitle = {International {Conference} on {Artificial} {Intelligence} and {Statistics}},
+	author = {Zhou, G. and Sohn, K. and Lee, H.},
+	year = {2012},
+	pages = {1453--1461},
+}
+
+@inproceedings{cai_online_2021,
+	title = {Online continual learning with natural distribution shifts: {An} empirical study with visual data},
+	booktitle = {Proceedings of the {IEEE}/{CVF} international conference on computer vision},
+	author = {Cai, Zhipeng and Sener, Ozan and Koltun, Vladlen},
+	year = {2021},
+	pages = {8281--8290},
+}
+
+@inproceedings{zinkevich_online_2003,
+	title = {Online convex programming and generalized infinitesimal gradient ascent},
+	booktitle = {Proceedings of the 20th international conference on machine learning (icml-03)},
+	author = {Zinkevich, Martin},
+	year = {2003},
+	pages = {928--936},
+}
+
+@inproceedings{space_angles_1983,
+	title = {On {Angles} between {Subspaces} of a {Finite} {Dimensional} {Inner} {Product} {Space} {Per} Åke {Wedin} {Institute} of {Information} {Processing}, {Dept} of {Numerical} {Analysis} {University} of {Umeå}, {S}-901 87 {UMEÅ}, {SWEDEN}},
+	volume = {973},
+	booktitle = {Matrix {Pencils}: {Proceedings} of a {Conference} {Held} at {Pite} {Havsbad}, {Sweden}, {March} 22-24, 1982},
+	publisher = {Lecture Notes in Mathematics},
+	author = {Space, Finite Dimensional Inner Product},
+	year = {1983},
+	pages = {263},
+}
+
+@incollection{rakhlin_martingale_2015,
+	title = {On {Martingale} {Extensions} of {Vapnik}–{Chervonenkis} {Theory} with {Applications} to {Online} {Learning}},
+	booktitle = {Measures of {Complexity}: {Festschrift} for {Alexey} {Chervonenkis}},
+	publisher = {Springer},
+	author = {Rakhlin, Alexander and Sridharan, Karthik},
+	year = {2015},
+	pages = {197--215},
+}
+
+@article{wenger_disconnect_2023,
+	title = {On the {Disconnect} {Between} {Theory} and {Practice} of {Overparametrized} {Neural} {Networks}},
+	journal = {arXiv preprint arXiv:2310.00137},
+	author = {Wenger, Jonathan and Dangel, Felix and Kristiadi, Agustinus},
+	year = {2023},
+}
+
+@inproceedings{liu_nonstationary_2023,
+	title = {Nonstationary bandit learning via predictive sampling},
+	booktitle = {International {Conference} on {Artificial} {Intelligence} and {Statistics}},
+	publisher = {PMLR},
+	author = {Liu, Yueyang and Van Roy, Benjamin and Xu, Kuang},
+	year = {2023},
+	pages = {6215--6244},
+}
+
+@misc{krizhevsky_learning_2009,
+	title = {Learning {Multiple} {Layers} of {Features} from {Tiny} {Images}},
+	url = {https://www.cs.toronto.edu/ kriz/learning-features-2009-TR.pdf},
+	publisher = {University of Toronto},
+	author = {Krizhevsky, Alex and Hinton, Geoffrey},
+	year = {2009},
+}
+
+@inproceedings{zihao_wu_is_2019,
+	title = {Is {Multi}-{Task} {Learning} an {Upper} {Bound} for {Continual} {Learning}?},
+	booktitle = {Proceedings of the 36th {International} {Conference} on {Machine} {Learning}},
+	publisher = {PMLR},
+	author = {Zihao Wu, Huy Tran, Hamed Pirsiavash and Kolouri, Soheil},
+	year = {2019},
+	pages = {6056--6065},
+}
+
+@misc{ba_layer_2016,
+	title = {Layer {Normalization}},
+	url = {https://arxiv.org/abs/1607.06450},
+	author = {Ba, Jimmy Lei and Kiros, Jamie Ryan and Hinton, Geoffrey E.},
+	year = {2016},
+	note = {\_eprint: 1607.06450},
+}
+
+@article{slivkins_introduction_2019,
+	title = {Introduction to multi-armed bandits},
+	volume = {12},
+	number = {1-2},
+	journal = {Foundations and Trends® in Machine Learning},
+	author = {Slivkins, Aleksandrs and {others}},
+	year = {2019},
+	note = {Publisher: Now Publishers, Inc.},
+	pages = {1--286},
+}
+
+@article{hazan_introduction_2016,
+	title = {Introduction to online convex optimization},
+	volume = {2},
+	number = {3-4},
+	journal = {Foundations and Trends® in Optimization},
+	author = {Hazan, Elad and {others}},
+	year = {2016},
+	note = {Publisher: Now Publishers, Inc.},
+	pages = {157--325},
+}
+
+@article{mnih_human-level_2015,
+	title = {Human-level control through deep reinforcement learning},
+	volume = {518},
+	number = {7540},
+	journal = {Nature},
+	author = {Mnih, Volodymyr and Kavukcuoglu, Koray and Silver, David and Rusu, Andrei A and Veness, Joel and Bellemare, Marc G and Graves, Alex and Riedmiller, Martin and Fidjeland, Andreas K and Ostrovski, Georg and Petersen, Stig and {others}},
+	year = {2015},
+	note = {Publisher: Nature Publishing Group},
+	pages = {529--533},
+}
+
+@misc{rebuffi_icarl_2017,
+	title = {{iCaRL}: {Incremental} {Classifier} and {Representation} {Learning}},
+	url = {https://arxiv.org/abs/1611.07725},
+	author = {Rebuffi, Sylvestre-Alvise and Kolesnikov, Alexander and Sperl, Georg and Lampert, Christoph H.},
+	year = {2017},
+	note = {\_eprint: 1611.07725},
+}
+
+@article{schulman_high-dimensional_2015,
+	title = {High-dimensional continuous control using generalized advantage estimation},
+	journal = {arXiv preprint arXiv:1506.02438},
+	author = {Schulman, John and Moritz, Philipp and Levine, Sergey and Jordan, Michael and Abbeel, Pieter},
+	year = {2015},
+}
+
+@article{lopez-paz_gradient_2017,
+	title = {Gradient episodic memory for continual learning},
+	volume = {30},
+	journal = {Advances in neural information processing systems},
+	author = {Lopez-Paz, David and Ranzato, Marc'Aurelio},
+	year = {2017},
+}
+
+@inproceedings{evron_how_2022,
+	title = {How catastrophic can catastrophic forgetting be in linear regression?},
+	booktitle = {Conference on {Learning} {Theory}},
+	publisher = {PMLR},
+	author = {Evron, Itay and Moroshko, Edward and Ward, Rachel and Srebro, Nathan and Soudry, Daniel},
+	year = {2022},
+	pages = {4028--4079},
+}
+
+@article{yu_gradient_2020,
+	title = {Gradient surgery for multi-task learning},
+	volume = {33},
+	journal = {Advances in Neural Information Processing Systems},
+	author = {Yu, Tianhe and Kumar, Saurabh and Gupta, Abhishek and Levine, Sergey and Hausman, Karol and Finn, Chelsea},
+	year = {2020},
+	pages = {5824--5836},
+}
+
+@inproceedings{bossard_food-101_2014,
+	title = {Food-101 – {Mining} {Discriminative} {Components} with {Random} {Forests}},
+	booktitle = {European {Conference} on {Computer} {Vision}},
+	author = {Bossard, Lukas and Guillaumin, Matthieu and Van Gool, Luc},
+	year = {2014},
+}
+
+@inproceedings{titsias_functional_2019,
+	title = {Functional {Regularisation} for {Continual} {Learning} with {Gaussian} {Processes}},
+	url = {https://arxiv.org/abs/1901.11356},
+	booktitle = {International {Conference} on {Learning} {Representations}},
+	author = {Titsias, Michalis K and Schwarz, Jonathan and Matthews, Alexander G de G and Pascanu, Razvan and Teh, Yee Whye},
+	year = {2019},
+	keywords = {Regularization},
+}
+
+@inproceedings{zhou_fortuitous_2021,
+	title = {Fortuitous forgetting in connectionist networks},
+	booktitle = {International {Conference} on {Learning} {Representations}},
+	author = {Zhou, Hattie and Vani, Ankit and Larochelle, Hugo and Courville, Aaron},
+	year = {2021},
+}
+
+@article{fang_exploring_2021,
+	title = {Exploring deep neural networks via layer-peeled model: {Minority} collapse in imbalanced training},
+	volume = {118},
+	number = {43},
+	journal = {Proceedings of the National Academy of Sciences},
+	author = {Fang, Cong and He, Hangfeng and Long, Qi and Su, Weijie J},
+	year = {2021},
+	note = {Publisher: National Academy of Sciences},
+	pages = {e2103091118},
+}
+
+@article{maji_fine-grained_2013,
+	title = {Fine-{Grained} {Visual} {Classification} of {Aircraft}},
+	volume = {abs/1306.5151},
+	url = {http://arxiv.org/abs/1306.5151},
+	journal = {CoRR},
+	author = {Maji, Subhransu and Rahtu, Esa and Kannala, Juho and Blaschko, Matthew B. and Vedaldi, Andrea},
+	year = {2013},
+	note = {arXiv: 1306.5151},
+}
+
+@article{hadsell_embracing_2020,
+	title = {Embracing {Change}: {Continual} {Learning} in {Deep} {Neural} {Networks}},
+	volume = {24},
+	url = {https://doi.org/10.1016/j.tics.2020.09.004},
+	doi = {10.1016/j.tics.2020.09.004},
+	number = {12},
+	journal = {Trends in Cognitive Sciences},
+	author = {Hadsell, Raia and Rao, Dushyant and Rusu, Andrei A and Pascanu, Razvan},
+	year = {2020},
+	note = {Publisher: Elsevier},
+	pages = {1028--1040},
+}
+
+@inproceedings{rolnick_experience_2019,
+	title = {Experience replay for continual learning},
+	volume = {32},
+	booktitle = {Advances in {Neural} {Information} {Processing} {Systems}},
+	author = {Rolnick, David and Ahuja, Arun and Schwarz, Jonathan and Lillicrap, Timothy and Wayne, Greg},
+	year = {2019},
+}
+
+@misc{hinton_distilling_2015,
+	title = {Distilling the {Knowledge} in a {Neural} {Network}},
+	url = {https://arxiv.org/abs/1503.02531},
+	author = {Hinton, Geoffrey and Vinyals, Oriol and Dean, Jeff},
+	year = {2015},
+	note = {\_eprint: 1503.02531},
+}
+
+@inproceedings{krause_describing_2014,
+	address = {Long Beach, CA},
+	title = {Describing {Textures} in the {Wild}},
+	volume = {abs/1306.5151},
+	url = {http://arxiv.org/abs/1306.5151},
+	booktitle = {Proceedings of the {IEEE} {Conf}. on {Computer} {Vision} and {Pattern} {Recognition} ({CVPR})},
+	publisher = {University of Alberta, Alberta Machine Intelligence Institute (Amii)},
+	author = {Krause, Jonathan and Stark, Michael and Deng, Jia and Fei-Fei, Li and Elsayed, Mohamed and Mahmood, A. Rupam and Maltoni, D. and Lomonaco, V. and Zenke, F. and Poole, B. and Ganguli, S. and Rusu, A. A. and Rabinowitz, N. C. and Desjardins, G. and Soyer, H. and Kirkpatrick, J. and Kavukcuoglu, K. and Pascanu, R. and Hadsell, R. and Zhou, G. and Sohn, K. and Lee, H. and Shin, H. and Lee, J. K. and Kim, J. and Kim, J. and Robins, A. V. and Maji, Subhransu and Rahtu, Esa and Kannala, Juho and Blaschko, Matthew B. and Vedaldi, Andrea and Cimpoi, M. and Maji, S. and Kokkinos, I. and Mohamed, S. and Vedaldi, {and} A.},
+	month = dec,
+	year = {2014},
+	note = {Issue: 2
+Journal Abbreviation: CoRR
+arXiv: 1306.5151},
+	pages = {123--146},
+}
+
+@misc{he_deep_2015,
+	title = {Deep {Residual} {Learning} for {Image} {Recognition}},
+	url = {https://arxiv.org/abs/1512.03385},
+	author = {He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
+	year = {2015},
+	note = {\_eprint: 1512.03385},
+}
+
+@inproceedings{powers_cora_2022,
+	title = {Cora: {Benchmarks}, baselines, and metrics as a platform for continual reinforcement learning agents},
+	booktitle = {Conference on {Lifelong} {Learning} {Agents}},
+	publisher = {PMLR},
+	author = {Powers, Sam and Xing, Eliot and Kolve, Eric and Mottaghi, Roozbeh and Gupta, Abhinav},
+	year = {2022},
+	pages = {705--743},
+}
+
+@book{boyd_convex_2004,
+	title = {Convex optimization},
+	publisher = {Cambridge university press},
+	author = {Boyd, Stephen and Vandenberghe, Lieven},
+	year = {2004},
+}
+
+@article{maltoni_continuous_2018,
+	title = {Continuous learning in single-incremental-task scenarios},
+	journal = {arXiv:1806.08568},
+	author = {Maltoni, D. and Lomonaco, V.},
+	year = {2018},
+}
+
+@article{parisi_continual_2019,
+	title = {Continual lifelong learning with neural networks: {A} review},
+	volume = {113},
+	journal = {Neural networks},
+	author = {Parisi, German I and Kemker, Ronald and Part, Jose L and Kanan, Christopher and Wermter, Stefan},
+	year = {2019},
+	note = {Publisher: Elsevier},
+	pages = {54--71},
+}
+
+@article{wolczyk_continual_2021,
+	title = {Continual world: {A} robotic benchmark for continual reinforcement learning},
+	volume = {34},
+	journal = {Advances in Neural Information Processing Systems},
+	author = {Wołczyk, Maciej and Zając, Michał and Pascanu, Razvan and Kuciński, Łukasz and Miłoś, Piotr},
+	year = {2021},
+	pages = {28496--28510},
+}
+
+@misc{pham_continual_2022,
+	title = {Continual {Normalization}: {Rethinking} {Batch} {Normalization} for {Online} {Continual} {Learning}},
+	url = {https://arxiv.org/abs/2203.16102},
+	author = {Pham, Quang and Liu, Chenghao and Hoi, Steven},
+	year = {2022},
+	note = {\_eprint: 2203.16102},
+}
+
+@inproceedings{shin_continual_2017,
+	address = {Long Beach, CA},
+	title = {Continual learning with deep generative replay},
+	booktitle = {Advances in {Neural} {Information} {Processing} {Systems}},
+	author = {Shin, H. and Lee, J. K. and Kim, J. and Kim, J.},
+	year = {2017},
+}
+
+@inproceedings{zenke_continual_2017,
+	title = {Continual learning through synaptic intelligence},
+	volume = {70},
+	booktitle = {Proceedings of the 34th {International} {Conference} on {Machine} {Learning} ({ICML})},
+	publisher = {PMLR},
+	author = {Zenke, Friedeman and Poole, Ben and Ganguli, Surya},
+	year = {2017},
+	pages = {3987--3995},
+}
+
+@article{riemer_continual_2022,
+	title = {Continual learning in environments with polynomial mixing times},
+	volume = {35},
+	journal = {Advances in Neural Information Processing Systems},
+	author = {Riemer, Matthew and Raparthy, Sharath Chandra and Cases, Ignacio and Subbaraj, Gopeshh and Puelma Touzel, Maximilian and Rish, Irina},
+	year = {2022},
+	pages = {21961--21973},
+}
+
+@inproceedings{ramasesh_continual_2022,
+	title = {Continual {Evaluation} for {Lifelong} {Learning}: {Identifying} the {Stability} {Gap}},
+	booktitle = {Advances in {Neural} {Information} {Processing} {Systems} ({NeurIPS})},
+	author = {Ramasesh, Vinay V. and Dullerud, Natalie and Yang, Rose E. Wang and Raghunathan, Aditi and Finn, Chelsea and Talwalkar, Ameet},
+	year = {2022},
+}
+
+@article{dohare_continual_2021,
+	title = {Continual backprop: {Stochastic} gradient descent with persistent randomness},
+	journal = {arXiv preprint arXiv:2108.06325},
+	author = {Dohare, Shibhansh and Sutton, Richard S and Mahmood, A Rupam},
+	year = {2021},
+}
+
+@misc{prabhuComputationallyBudgetedContinual2023c,
+  title = {Computationally {{Budgeted Continual Learning}}: {{What Does Matter}}?},
+  shorttitle = {Computationally {{Budgeted Continual Learning}}},
+  author = {Prabhu, Ameya and Hammoud, Hasan Abed Al Kader and Dokania, Puneet and Torr, Philip H. S. and Lim, Ser-Nam and Ghanem, Bernard and Bibi, Adel},
+  year = {2023},
+  month = jul,
+  number = {arXiv:2303.11165},
+  eprint = {2303.11165},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2303.11165},
+  urldate = {2025-10-08},
+  abstract = {Continual Learning (CL) aims to sequentially train models on streams of incoming data that vary in distribution by preserving previous knowledge while adapting to new data. Current CL literature focuses on restricted access to previously seen data, while imposing no constraints on the computational budget for training. This is unreasonable for applications in-the-wild, where systems are primarily constrained by computational and time budgets, not storage. We revisit this problem with a large-scale benchmark and analyze the performance of traditional CL approaches in a compute-constrained setting, where effective memory samples used in training can be implicitly restricted as a consequence of limited computation. We conduct experiments evaluating various CL sampling strategies, distillation losses, and partial fine-tuning on two large-scale datasets, namely ImageNet2K and Continual Google Landmarks V2 in data incremental, class incremental, and time incremental settings. Through extensive experiments amounting to a total of over 1500 GPU-hours, we find that, under compute-constrained setting, traditional CL approaches, with no exception, fail to outperform a simple minimal baseline that samples uniformly from memory. Our conclusions are consistent in a different number of stream time steps, e.g., 20 to 200, and under several computational budgets. This suggests that most existing CL methods are particularly too computationally expensive for realistic budgeted deployment. Code for this project is available at: https://github.com/drimpossible/BudgetCL.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning},
+}
+
+
+@article{kumar_continual_2023,
+	title = {Continual learning as computationally constrained reinforcement learning},
+	journal = {arXiv preprint arXiv:2307.04345},
+	author = {Kumar, Saurabh and Marklund, Henrik and Rao, Ashish and Zhu, Yifan and Jeon, Hong Jun and Liu, Yueyang and Van Roy, Benjamin},
+	year = {2023},
+}
+
+@inproceedings{gunasekar_characterizing_2018,
+	title = {Characterizing implicit bias in terms of optimization geometry},
+	booktitle = {International {Conference} on {Machine} {Learning}},
+	publisher = {PMLR},
+	author = {Gunasekar, Suriya and Lee, Jason and Soudry, Daniel and Srebro, Nathan},
+	year = {2018},
+	pages = {1832--1841},
+}
+
+@article{robins_catastrophic_1995,
+	title = {Catastrophic forgetting, rehearsal and pseudorehearsal},
+	volume = {7},
+	number = {2},
+	journal = {Connection Science},
+	author = {Robins, Anthony},
+	year = {1995},
+	note = {Publisher: Taylor \& Francis},
+	pages = {123--146},
+}
+
+@article{elsayed_addressing_2022,
+	title = {Addressing {Loss} of {Plasticity} and {Catastrophic} {Forgetting} in {Continual} {Learning}},
+	journal = {arXiv preprint arXiv:2205.12995},
+	author = {Elsayed, Mohamed and Mahmood, A. Rupam},
+	year = {2022},
+	note = {Publisher: University of Alberta, Alberta Machine Intelligence Institute (Amii)},
+}
+
+@article{french_catastrophic_1999,
+	title = {Catastrophic forgetting in connectionist networks},
+	volume = {3},
+	issn = {13646613},
+	url = {https://www.sciencedirect.com/science/article/abs/pii/S1364661399012942},
+	doi = {10.1016/S1364-6613(99)01294-2},
+	number = {4},
+	journal = {Trends in Cognitive Sciences},
+	author = {French, Robert M.},
+	year = {1999},
+	pmid = {10322466},
+	note = {ISBN: 13646613},
+	keywords = {Classic},
+	pages = {128--135},
+}
+
+@article{du_adapting_2018,
+	title = {Adapting {Auxiliary} {Losses} {Using} {Gradient} {Similarity}},
+	volume = {abs/1812.02224},
+	url = {https://api.semanticscholar.org/CorpusID:53579309},
+	journal = {ArXiv},
+	author = {Du, Yunshu and Czarnecki, Wojciech M. and Jayakumar, Siddhant M. and Pascanu, Razvan and Lakshminarayanan, Balaji},
+	year = {2018},
+}
+
+@article{zhu_angles_2013,
+	title = {Angles between subspaces and their tangents},
+	volume = {21},
+	number = {4},
+	journal = {Journal of Numerical Mathematics},
+	author = {Zhu, Peizhen and Knyazev, Andrew V},
+	year = {2013},
+	note = {Publisher: De Gruyter},
+	pages = {325--340},
+}
+
+@misc{ioffe_batch_2015,
+	title = {Batch {Normalization}: {Accelerating} {Deep} {Network} {Training} by {Reducing} {Internal} {Covariate} {Shift}},
+	url = {https://arxiv.org/abs/1502.03167},
+	author = {Ioffe, Sergey and Szegedy, Christian},
+	year = {2015},
+	note = {\_eprint: 1502.03167},
+}
+
+@article{zhang_deeper_2020,
+	title = {A {Deeper} {Look} at {Experience} {Replay}},
+	volume = {Volume Number},
+	journal = {Journal or Conference Name},
+	author = {Zhang, Shangtong and Sutton, Richard S.},
+	year = {2020},
+	pages = {Page Numbers},
+}
+
+@article{mundt_wholistic_2023,
+	title = {A wholistic view of continual learning with deep neural networks: {Forgotten} lessons and the bridge to active and open world learning},
+	volume = {160},
+	journal = {Neural Networks},
+	author = {Mundt, Martin and Hong, Yongwon and Pliushch, Iuliia and Ramesh, Visvanathan},
+	year = {2023},
+	note = {Publisher: Elsevier},
+	pages = {306--336},
+}
+
+@article{orabona_modern_2019,
+	title = {A modern introduction to online learning},
+	journal = {arXiv preprint arXiv:1912.13213},
+	author = {Orabona, Francesco},
+	year = {2019},
+}
+
+@inproceedings{krause_4th_2013,
+	address = {Sydney, Australia},
+	title = {4th {IEEE} {Workshop} on {3D} {Representation} and {Recognition}, at {ICCV} 2013 ({3dRR}-13)},
+	booktitle = {Proceedings of the {IEEE} {International} {Conference} on {Computer} {Vision} {Workshops} ({ICCVW})},
+	author = {Krause, Jonathan and Stark, Michael and Deng, Jia and Fei-Fei, Li},
+	month = dec,
+	year = {2013},
+}
+
+@inproceedings{parkhi_cats_nodate,
+	title = {Cats and {Dogs}},
+	booktitle = {{IEEE} {Conference} on {Computer} {Vision} and {Pattern} {Recognition}},
+	publisher = {IEEE},
+	author = {Parkhi, Omkar M. and Vedaldi, Andrea and Zisserman, Andrew and Jawahar, C. V.},
+	pages = {startpage--endpage},
+}
+
+@misc{hoi_online_2018,
+	title = {Online {Learning}: {A} {Comprehensive} {Survey}},
+	url = {https://arxiv.org/abs/1802.02871},
+	author = {Hoi, Steven C. H. and Sahoo, Doyen and Lu, Jing and Zhao, Peilin},
+	year = {2018},
+	note = {\_eprint: 1802.02871},
+}
+
+@article{van_de_ven_generative_2018,
+	title = {Generative replay with feedback connections as a general strategy for continual learning},
+	journal = {arXiv preprint arXiv:1809.10635},
+	author = {Van de Ven, Gido M and Tolias, Andreas S},
+	year = {2018},
+}
+
+@article{yang_neural_2023,
+	title = {Neural collapse inspired feature-classifier alignment for few-shot class incremental learning},
+	journal = {arXiv preprint arXiv:2302.03004},
+	author = {Yang, Yibo and Yuan, Haobo and Li, Xiangtai and Lin, Zhouchen and Torr, Philip and Tao, Dacheng},
+	year = {2023},
+}
+
+@article{prabhu_random_2024,
+	title = {Random {Representations} {Outperform} {Online} {Continually} {Learned} {Representations}},
+	journal = {arXiv preprint arXiv:2402.08823},
+	author = {Prabhu, Ameya and Sinha, Shiven and Kumaraguru, Ponnurangam and Torr, Philip HS and Sener, Ozan and Dokania, Puneet K},
+	year = {2024},
+}
+
+@inproceedings{fini_self-supervised_2022,
+	title = {Self-supervised models are continual learners},
+	booktitle = {Proceedings of the {IEEE}/{CVF} conference on computer vision and pattern recognition},
+	author = {Fini, Enrico and Da Costa, Victor G Turrisi and Alameda-Pineda, Xavier and Ricci, Elisa and Alahari, Karteek and Mairal, Julien},
+	year = {2022},
+	pages = {9621--9630},
+}
+
+@article{caccia_new_2021,
+	title = {New insights on reducing abrupt representation change in online continual learning},
+	journal = {arXiv preprint arXiv:2104.05025},
+	author = {Caccia, Lucas and Aljundi, Rahaf and Asadi, Nader and Tuytelaars, Tinne and Pineau, Joelle and Belilovsky, Eugene},
+	year = {2021},
+}
+
+@inproceedings{davari_probing_2022,
+	title = {Probing representation forgetting in supervised and unsupervised continual learning},
+	booktitle = {Proceedings of the {IEEE}/{CVF} conference on computer vision and pattern recognition},
+	author = {Davari, MohammadReza and Asadi, Nader and Mudur, Sudhir and Aljundi, Rahaf and Belilovsky, Eugene},
+	year = {2022},
+	pages = {16712--16721},
+}
+
+@inproceedings{wu_large_2019,
+	title = {Large scale incremental learning},
+	booktitle = {Proceedings of the {IEEE}/{CVF} conference on computer vision and pattern recognition},
+	author = {Wu, Yue and Chen, Yinpeng and Wang, Lijuan and Ye, Yuancheng and Liu, Zicheng and Guo, Yandong and Fu, Yun},
+	year = {2019},
+	pages = {374--382},
+}
+
+@article{wah_caltech-ucsd_2011,
+	title = {The caltech-ucsd birds-200-2011 dataset},
+	author = {Wah, Catherine and Branson, Steve and Welinder, Peter and Perona, Pietro and Belongie, Serge},
+	year = {2011},
+	note = {Publisher: California Institute of Technology},
+}
+
+@inproceedings{seo_learning_2024,
+	title = {Learning equi-angular representations for online continual learning},
+	booktitle = {Proceedings of the {IEEE}/{CVF} {Conference} on {Computer} {Vision} and {Pattern} {Recognition}},
+	author = {Seo, Minhyuk and Koh, Hyunseo and Jeung, Wonje and Lee, Minjae and Kim, San and Lee, Hankook and Cho, Sungjun and Choi, Sungik and Kim, Hyunwoo and Choi, Jonghyun},
+	year = {2024},
+	pages = {23933--23942},
+}
+
+@inproceedings{prabhu_gdumb_2020,
+	title = {Gdumb: {A} simple approach that questions our progress in continual learning},
+	booktitle = {Computer {Vision}–{ECCV} 2020: 16th {European} {Conference}, {Glasgow}, {UK}, {August} 23–28, 2020, {Proceedings}, {Part} {II} 16},
+	publisher = {Springer},
+	author = {Prabhu, Ameya and Torr, Philip HS and Dokania, Puneet K},
+	year = {2020},
+	pages = {524--540},
+}
+
+@inproceedings{liu_inducing_2023,
+	title = {Inducing neural collapse in deep long-tailed learning},
+	booktitle = {International conference on artificial intelligence and statistics},
+	publisher = {PMLR},
+	author = {Liu, Xuantong and Zhang, Jianfeng and Hu, Tianyang and Cao, He and Yao, Yuan and Pan, Lujia},
+	year = {2023},
+	pages = {11534--11544},
+}
+
+@article{wojtowytsch_emergence_2020,
+	title = {On the emergence of simplex symmetry in the final and penultimate layers of neural network classifiers},
+	journal = {arXiv preprint arXiv:2012.05420},
+	author = {Wojtowytsch, Stephan and {others}},
+	year = {2020},
+}
+
+@article{hong_neural_2023,
+	title = {Neural collapse for unconstrained feature model under cross-entropy loss with imbalanced data},
+	journal = {arXiv preprint arXiv:2309.09725},
+	author = {Hong, Wanli and Ling, Shuyang},
+	year = {2023},
+}
+
+@article{torralba_80_2008,
+	title = {80 million tiny images: {A} large data set for nonparametric object and scene recognition},
+	volume = {30},
+	number = {11},
+	journal = {IEEE transactions on pattern analysis and machine intelligence},
+	author = {Torralba, Antonio and Fergus, Rob and Freeman, William T},
+	year = {2008},
+	note = {Publisher: IEEE},
+	pages = {1958--1970},
+}
+
+@article{borsos_coresets_2020,
+	title = {Coresets via bilevel optimization for continual learning and streaming},
+	volume = {33},
+	journal = {Advances in neural information processing systems},
+	author = {Borsos, Zalán and Mutny, Mojmir and Krause, Andreas},
+	year = {2020},
+	pages = {14879--14890},
+}
+
+@article{galanti_role_2021,
+	title = {On the role of neural collapse in transfer learning},
+	journal = {arXiv preprint arXiv:2112.15121},
+	author = {Galanti, Tomer and György, András and Hutter, Marcus},
+	year = {2021},
+}
+
+@article{poggio_explicit_2020,
+	title = {Explicit regularization and implicit bias in deep network classifiers trained with the square loss},
+	journal = {arXiv preprint arXiv:2101.00072},
+	author = {Poggio, Tomaso and Liao, Qianli},
+	year = {2020},
+}
+
+@article{han_neural_2021,
+	title = {Neural collapse under mse loss: {Proximity} to and dynamics on the central path},
+	journal = {arXiv preprint arXiv:2106.02073},
+	author = {Han, XY and Papyan, Vardan and Donoho, David L},
+	year = {2021},
+}
+
+@article{mixon_neural_2022,
+	title = {Neural collapse with unconstrained features},
+	volume = {20},
+	number = {2},
+	journal = {Sampling Theory, Signal Processing, and Data Analysis},
+	author = {Mixon, Dustin G and Parshall, Hans and Pi, Jianzong},
+	year = {2022},
+	note = {Publisher: Springer},
+	pages = {11},
+}
+
+@article{lu_neural_2022,
+	title = {Neural collapse under cross-entropy loss},
+	volume = {59},
+	journal = {Applied and Computational Harmonic Analysis},
+	author = {Lu, Jianfeng and Steinerberger, Stefan},
+	year = {2022},
+	note = {Publisher: Elsevier},
+	pages = {224--241},
+}
+
+@article{hui_limitations_2022,
+	title = {Limitations of neural collapse for understanding generalization in deep learning},
+	journal = {arXiv preprint arXiv:2202.08384},
+	author = {Hui, Like and Belkin, Mikhail and Nakkiran, Preetum},
+	year = {2022},
+}
+
+@article{yu_continual_2022,
+	title = {Continual learning by modeling intra-class variation},
+	journal = {arXiv preprint arXiv:2210.05398},
+	author = {Yu, Longhui and Hu, Tianyang and Hong, Lanqing and Liu, Zhen and Weller, Adrian and Liu, Weiyang},
+	year = {2022},
+}
+
+@article{hess_knowledge_2023,
+	title = {Knowledge accumulation in continually learned representations and the issue of feature forgetting},
+	journal = {arXiv preprint arXiv:2304.00933},
+	author = {Hess, Timm and Verwimp, Eli and van de Ven, Gido M and Tuytelaars, Tinne},
+	year = {2023},
+}
+
+@inproceedings{murata_what_2020,
+	title = {What is happening inside a continual learning model? a representation-based evaluation of representational forgetting},
+	booktitle = {Proceedings of the {IEEE}/{CVF} {Conference} on {Computer} {Vision} and {Pattern} {Recognition} {Workshops}},
+	author = {Murata, Kengo and Toyota, Tetsuya and Ohara, Kouzou},
+	year = {2020},
+	pages = {234--235},
+}
+
+@article{wu_linguistic_2025,
+	title = {Linguistic collapse: {Neural} collapse in (large) language models},
+	volume = {37},
+	journal = {Advances in Neural Information Processing Systems},
+	author = {Wu, Robert and Papyan, Vardan},
+	year = {2025},
+	pages = {137432--137473},
+}
+
+@inproceedings{chaudhry_using_2021,
+	title = {Using hindsight to anchor past knowledge in continual learning},
+	volume = {35},
+	booktitle = {Proceedings of the {AAAI} conference on artificial intelligence},
+	author = {Chaudhry, Arslan and Gordo, Albert and Dokania, Puneet and Torr, Philip and Lopez-Paz, David},
+	year = {2021},
+	note = {Issue: 8},
+	pages = {6993--7001},
+}
+
+@inproceedings{hou_learning_2019,
+	title = {Learning a unified classifier incrementally via rebalancing},
+	booktitle = {Proceedings of the {IEEE}/{CVF} conference on computer vision and pattern recognition},
+	author = {Hou, Saihui and Pan, Xinyu and Loy, Chen Change and Wang, Zilei and Lin, Dahua},
+	year = {2019},
+	pages = {831--839},
+}
+
+@article{zhang_feature_2022,
+	title = {Feature forgetting in continual representation learning},
+	journal = {arXiv preprint arXiv:2205.13359},
+	author = {Zhang, Xiao and Dou, Dejing and Wu, Ji},
+	year = {2022},
+}
+
+@article{ramasesh_anatomy_2020,
+	title = {Anatomy of catastrophic forgetting: {Hidden} representations and task semantics},
+	journal = {arXiv preprint arXiv:2007.07400},
+	author = {Ramasesh, Vinay V and Dyer, Ethan and Raghu, Maithra},
+	year = {2020},
+}
+
+@article{hacohen_forgetting_2024,
+	title = {Forgetting {Order} of {Continual} {Learning}: {Examples} {That} are {Learned} {First} are {Forgotten} {Last}},
+	journal = {arXiv preprint arXiv:2406.09935},
+	author = {Hacohen, Guy and Tuytelaars, Tinne},
+	year = {2024},
+}
+
+@inproceedings{riemer_scalable_2019,
+	title = {Scalable recollections for continual lifelong learning},
+	volume = {33},
+	booktitle = {Proceedings of the {AAAI} conference on artificial intelligence},
+	author = {Riemer, Matthew and Klinger, Tim and Bouneffouf, Djallel and Franceschini, Michele},
+	year = {2019},
+	note = {Issue: 01},
+	pages = {1352--1359},
+}
+
+@article{aljundi_online_2019,
+	title = {Online continual learning with maximal interfered retrieval},
+	volume = {32},
+	journal = {Advances in neural information processing systems},
+	author = {Aljundi, Rahaf and Belilovsky, Eugene and Tuytelaars, Tinne and Charlin, Laurent and Caccia, Massimo and Lin, Min and Page-Caccia, Lucas},
+	year = {2019},
+}
+
+@article{riemer_learning_2018,
+	title = {Learning to learn without forgetting by maximizing transfer and minimizing interference},
+	journal = {arXiv preprint arXiv:1810.11910},
+	author = {Riemer, Matthew and Cases, Ignacio and Ajemian, Robert and Liu, Miao and Rish, Irina and Tu, Yuhai and Tesauro, Gerald},
+	year = {2018},
+}
+
+@article{kothapalli_neural_2022,
+	title = {Neural collapse: {A} review on modelling principles and generalization},
+	journal = {arXiv preprint arXiv:2206.04041},
+	author = {Kothapalli, Vignesh},
+	year = {2022},
+}
+
+@article{papyan_prevalence_2020,
+	title = {Prevalence of neural collapse during the terminal phase of deep learning training},
+	volume = {117},
+	number = {40},
+	journal = {Proceedings of the National Academy of Sciences},
+	author = {Papyan, Vardan and Han, XY and Donoho, David L},
+	year = {2020},
+	note = {Publisher: National Acad Sciences},
+	pages = {24652--24663},
+}
+
+@article{yoon_online_2021,
+	title = {Online coreset selection for rehearsal-based continual learning},
+	journal = {arXiv preprint arXiv:2106.01085},
+	author = {Yoon, Jaehong and Madaan, Divyam and Yang, Eunho and Hwang, Sung Ju},
+	year = {2021},
+}
+
+@article{aljundi_gradient_2019,
+	title = {Gradient based sample selection for online continual learning},
+	volume = {32},
+	journal = {Advances in neural information processing systems},
+	author = {Aljundi, Rahaf and Lin, Min and Goujaud, Baptiste and Bengio, Yoshua},
+	year = {2019},
+}
+
+@article{chaudhry_tiny_2019,
+	title = {On tiny episodic memories in continual learning},
+	journal = {arXiv preprint arXiv:1902.10486},
+	author = {Chaudhry, Arslan and Rohrbach, Marcus and Elhoseiny, Mohamed and Ajanthan, Thalaiyasingam and Dokania, Puneet K and Torr, Philip HS and Ranzato, Marc'Aurelio},
+	year = {2019},
+}
+
+@inproceedings{buzzega_rethinking_2021,
+	title = {Rethinking experience replay: a bag of tricks for continual learning},
+	booktitle = {2020 25th {International} {Conference} on {Pattern} {Recognition} ({ICPR})},
+	publisher = {IEEE},
+	author = {Buzzega, Pietro and Boschini, Matteo and Porrello, Angelo and Calderara, Simone},
+	year = {2021},
+	pages = {2180--2187},
+}
+
+@misc{hoi_online_2018-1,
+	title = {Online {Learning}: {A} {Comprehensive} {Survey}},
+	url = {https://arxiv.org/abs/1802.02871},
+	author = {Hoi, Steven C. H. and Sahoo, Doyen and Lu, Jing and Zhao, Peilin},
+	year = {2018},
+	note = {\_eprint: 1802.02871},
+}
+
+@inproceedings{mokhtari_online_2016,
+	title = {Online optimization in dynamic environments: {Improved} regret rates for strongly convex problems},
+	booktitle = {2016 {IEEE} 55th {Conference} on {Decision} and {Control} ({CDC})},
+	publisher = {IEEE},
+	author = {Mokhtari, Aryan and Shahrampour, Shahin and Jadbabaie, Ali and Ribeiro, Alejandro},
+	year = {2016},
+	pages = {7195--7201},
+}
+
+@article{verwimp_continual_2023,
+	title = {Continual learning: {Applications} and the road forward},
+	journal = {arXiv preprint arXiv:2311.11908},
+	author = {Verwimp, Eli and Ben-David, Shai and Bethge, Matthias and Cossu, Andrea and Gepperth, Alexander and Hayes, Tyler L and Hüllermeier, Eyke and Kanan, Christopher and Kudithipudi, Dhireesha and Lampert, Christoph H and {others}},
+	year = {2023},
+}
+
+@article{khodak_adaptive_2019,
+	title = {Adaptive gradient-based meta-learning methods},
+	volume = {32},
+	journal = {Advances in Neural Information Processing Systems},
+	author = {Khodak, Mikhail and Balcan, Maria-Florina F and Talwalkar, Ameet S},
+	year = {2019},
+}
+
+@inproceedings{buzzega_dark_2020,
+	title = {Dark {Experience} for {General} {Continual} {Learning}: a {Strong}, {Simple} {Baseline}},
+	volume = {33},
+	url = {https://proceedings.neurips.cc/paper_files/paper/2020/file/b704ea2c39778f07c617f6b7ce480e9e-Paper.pdf},
+	booktitle = {Advances in {Neural} {Information} {Processing} {Systems}},
+	publisher = {Curran Associates, Inc.},
+	author = {Buzzega, Pietro and Boschini, Matteo and Porrello, Angelo and Abati, Davide and CALDERARA, SIMONE},
+	editor = {Larochelle, H. and Ranzato, M. and Hadsell, R. and Balcan, M. F. and Lin, H.},
+	year = {2020},
+	pages = {15920--15930},
+}
+
+@inproceedings{bossard_three_2019,
+	title = {Three scenarios for continual learning},
+	volume = {33},
+	url = {https://arxiv.org/abs/1904.07734},
+	booktitle = {Advances in {Neural} {Information} {Processing} {Systems}},
+	publisher = {Curran Associates, Inc.},
+	author = {Bossard, Lukas and Guillaumin, Matthieu and Van Gool, Luc and Parkhi, Omkar M. and Vedaldi, Andrea and Zisserman, Andrew and Jawahar, C. V. and Krizhevsky, Alex and Hinton, Geoffrey and Lin, Long-Ji and Zhang, Shangtong and Sutton, Richard S. and Schulman, John and Moritz, Philipp and Levine, Sergey and Jordan, Michael and Abbeel, Pieter and Robins, Anthony and Buzzega, Pietro and Boschini, Matteo and Porrello, Angelo and Abati, Davide and CALDERARA, SIMONE and Ven, Gido M. van de and Tolias, Andreas S.},
+	editor = {Larochelle, H. and Ranzato, M. and Hadsell, R. and Balcan, M. F. and Lin, H.},
+	year = {2019},
+	note = {Backup Publisher: University of Toronto
+Issue: 2
+Journal Abbreviation: Connection Science
+\_eprint: 1904.07734},
+	pages = {15920--15930},
+}
+
+@inproceedings{zihao_wu_online_2018,
+	title = {Online {Learning}: {A} {Comprehensive} {Survey}},
+	volume = {24},
+	url = {https://arxiv.org/abs/1802.02871},
+	doi = {10.48550/arXiv.1910.10897},
+	booktitle = {Proceedings of the {Conference} on {Robot} {Learning} ({CoRL})},
+	publisher = {Elsevier},
+	author = {Zihao Wu, Huy Tran, Hamed Pirsiavash and Kolouri, Soheil and Hadsell, Raia and Rao, Dushyant and Rusu, Andrei A and Pascanu, Razvan and Schulman, John and Wolski, Filip and Dhariwal, Prafulla and Radford, Alec and Klimov, Oleg and Yu, Ting and Quillen, Daniel and He, Zhizhong and Julian, Roberto and Hausman, Kyle and Finn, Chelsea and Levine, Sergey and Hoi, Steven C. H. and Sahoo, Doyen and Lu, Jing and Zhao, Peilin},
+	year = {2018},
+	note = {Backup Publisher: PMLR
+Issue: 12
+Journal Abbreviation: arXiv preprint arXiv:1707.06347
+\_eprint: 1802.02871},
+	pages = {1094--1100},
+}
+
+@article{wu_measuring_2019,
+	title = {Measuring and regularizing networks in function space},
+	volume = {30},
+	url = {https://arxiv.org/abs/1805.08289},
+	number = {11},
+	journal = {Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
+	author = {Wu, Robert and Papyan, Vardan and Ramasesh, Vinay V and Dyer, Ethan and Raghu, Maithra and Murata, Kengo and Toyota, Tetsuya and Ohara, Kouzou and Hess, Timm and Verwimp, Eli and van de Ven, Gido M and Tuytelaars, Tinne and Zhang, Xiao and Dou, Dejing and Wu, Ji and Hou, Saihui and Pan, Xinyu and Loy, Chen Change and Wang, Zilei and Lin, Dahua and Yu, Longhui and Hu, Tianyang and Hong, Lanqing and Liu, Zhen and Weller, Adrian and Liu, Weiyang and Chaudhry, Arslan and Gordo, Albert and Dokania, Puneet and Torr, Philip and Lopez-Paz, David and Hui, Like and Belkin, Mikhail and Nakkiran, Preetum and Lu, Jianfeng and Steinerberger, Stefan and Hong, Wanli and Ling, Shuyang and Mixon, Dustin G and Parshall, Hans and Pi, Jianzong and Wojtowytsch, Stephan and {others} and Fang, Cong and He, Hangfeng and Long, Qi and Su, Weijie J and Han, XY and Papyan, Vardan and Donoho, David L and Liu, Xuantong and Zhang, Jianfeng and Hu, Tianyang and Cao, He and Yao, Yuan and Pan, Lujia and Poggio, Tomaso and Liao, Qianli and Galanti, Tomer and György, András and Hutter, Marcus and Borsos, Zalán and Mutny, Mojmir and Krause, Andreas and Torralba, Antonio and Fergus, Rob and Freeman, William T and Wah, Catherine and Branson, Steve and Welinder, Peter and Perona, Pietro and Belongie, Serge and Wu, Yue and Chen, Yinpeng and Wang, Lijuan and Ye, Yuancheng and Liu, Zicheng and Guo, Yandong and Fu, Yun and Benjamin, Ari S. and Rolnick, David and Kording, Konrad},
+	year = {2019},
+	note = {Backup Publisher: PMLR
+Publisher: California Institute of Technology
+\_eprint: 1805.08289},
+	pages = {374--382},
+}
+
+@article{verwimp_maintaining_2019,
+	title = {Maintaining {Discrimination} and {Fairness} in {Class} {Incremental} {Learning}},
+	volume = {117},
+	url = {https://arxiv.org/abs/1911.07053},
+	number = {40},
+	journal = {Proceedings of the AAAI conference on artificial intelligence},
+	author = {Verwimp, Eli and Ben-David, Shai and Bethge, Matthias and Cossu, Andrea and Gepperth, Alexander and Hayes, Tyler L and Hüllermeier, Eyke and Kanan, Christopher and Kudithipudi, Dhireesha and Lampert, Christoph H and {others} and Khodak, Mikhail and Balcan, Maria-Florina F and Talwalkar, Ameet S and Mokhtari, Aryan and Shahrampour, Shahin and Jadbabaie, Ali and Ribeiro, Alejandro and Buzzega, Pietro and Boschini, Matteo and Porrello, Angelo and Calderara, Simone and Riemer, Matthew and Cases, Ignacio and Ajemian, Robert and Liu, Miao and Rish, Irina and Tu, Yuhai and Tesauro, Gerald and Chaudhry, Arslan and Rohrbach, Marcus and Elhoseiny, Mohamed and Ajanthan, Thalaiyasingam and Dokania, Puneet K and Torr, Philip HS and Ranzato, Marc'Aurelio and Aljundi, Rahaf and Lin, Min and Goujaud, Baptiste and Bengio, Yoshua and Aljundi, Rahaf and Belilovsky, Eugene and Tuytelaars, Tinne and Charlin, Laurent and Caccia, Massimo and Lin, Min and Page-Caccia, Lucas and Riemer, Matthew and Klinger, Tim and Bouneffouf, Djallel and Franceschini, Michele and Yoon, Jaehong and Madaan, Divyam and Yang, Eunho and Hwang, Sung Ju and Hacohen, Guy and Tuytelaars, Tinne and Papyan, Vardan and Han, XY and Donoho, David L and Kothapalli, Vignesh and Zhao, Bowen and Xiao, Xi and Gan, Guojun and Zhang, Bin and Xia, Shutao},
+	year = {2019},
+	note = {Backup Publisher: IEEE
+Publisher: National Acad Sciences
+\_eprint: 1911.07053},
+	pages = {24652--24663},
+}
+
+@inproceedings{jacot_improving_2019,
+	title = {Improving and {Understanding} {Variational} {Continual} {Learning}},
+	volume = {abs/1905.02099},
+	url = {https://arxiv.org/abs/1905.02099},
+	booktitle = {Advances in {Neural} {Information} {Processing} {Systems}},
+	publisher = {Curran Associates, Inc.},
+	author = {Jacot, Arthur and Gabriel, Franck and Hongler, Clement and He, Xu and Sygnowski, Jakub and Galashov, Alexandre and Rusu, Andrei A. and Teh, Yee Whye and Pascanu, Razvan and Swaroop, Siddharth and Nguyen, Cuong V. and Bui, Thang D. and Turner, Richard E.},
+	editor = {Bengio, S. and Wallach, H. and Larochelle, H. and Grauman, K. and Cesa-Bianchi, N. and Garnett, R.},
+	year = {2019},
+	note = {Journal Abbreviation: ArXiv},
+	keywords = {Regularization},
+}
+
+@incollection{thrun_continual_2020,
+	title = {Continual learning for robotics: {Definition}, framework, learning strategies, opportunities and challenges},
+	volume = {58},
+	url = {http://www.sciencedirect.com/science/article/pii/S1566253519307377},
+	booktitle = {The biology and technology of intelligent autonomous agents},
+	publisher = {Springer},
+	author = {Thrun, Sebastian and Mitchell, Tom M and Lesort, Timothée and Lomonaco, Vincenzo and Stoian, Andrei and Maltoni, Davide and Filliat, David and Díaz-Rodríguez, Natalia},
+	year = {2020},
+	doi = {https://doi.org/10.1016/j.inffus.2019.12.004},
+	note = {ISSN: 1566-2535
+Journal Abbreviation: Information Fusion},
+	keywords = {Catastrophic Forgetting, Continual Learning, Deep Learning, Lifelong Learning, Reinforcement Learning, Robotics, Survey},
+	pages = {52 -- 68},
+}
